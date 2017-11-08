@@ -3,7 +3,7 @@
   <id>org.signal.Signal.desktop</id>
   <name>Signal</name>
   <project_license>GPL3</project_license>
-  <developer_name>Slack</developer_name>
+  <developer_name>Whisper Systems</developer_name>
   <summary>Private messenger for the desktop</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <url type="homepage">https://signal.org/</url>
