@@ -22,6 +22,7 @@
   </screenshots>
   <releases>
     <release version="1.0.35" date="2017-11-01"/>
+    <release version="1.0.37" date="2017-11-08"/>
   </releases>
   <update_contact>b@bpiotrowski.pl</update_contact>
 </component>
