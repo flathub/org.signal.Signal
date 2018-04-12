@@ -1,4 +1,4 @@
-{
+ {
     "app-id": "org.signal.Signal",
     "base": "io.atom.electron.BaseApp",
     "base-version": "stable",
@@ -37,8 +37,8 @@
                 {
                     "type": "file",
                     "only-arches": ["x86_64"],
-                    "url": "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_1.6.0_amd64.deb",
-                    "sha256": "4bf8a984438b9f404a2cec958ad76d622608984b6c16b1cfc3c3d88b491d35ab"
+                    "url": "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_1.7.0_amd64.deb",
+                    "sha256": "771f727f61f08b250d80db4ab573b2ca07ca78e6a865ddb93beefd484bd88ba5"
                 },
                 {
                     "type": "script",
