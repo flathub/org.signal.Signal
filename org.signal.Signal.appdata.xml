@@ -3,7 +3,7 @@
   <id>org.signal.Signal.desktop</id>
   <name>Signal</name>
   <project_license>GPL-3.0</project_license>
-  <developer_name>Whisper Systems</developer_name>
+  <developer_name>Open Whisper Systems</developer_name>
   <summary>Private messenger for the desktop</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <url type="homepage">https://signal.org/</url>
@@ -21,6 +21,7 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.10.1" date="2018-05-11"/>
     <release version="1.9.0" date="2018-05-01"/>
     <release version="1.8.0" date="2018-04-25"/>
     <release version="1.7.1" date="2018-04-13"/>
