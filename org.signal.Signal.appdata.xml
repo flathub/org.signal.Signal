@@ -16,7 +16,7 @@
     <screenshot>
       <image type="source">https://signal.org/blog/images/signal-desktop-splash.png</image>
     </screenshot>
-    <screenshot>
+    <screenshot type="default">
       <image type="source">https://signal.org/blog/images/signal-desktop-foucault.png</image>
     </screenshot>
   </screenshots>
