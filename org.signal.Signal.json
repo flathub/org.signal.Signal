@@ -3,7 +3,7 @@
     "base": "io.atom.electron.BaseApp",
     "base-version": "stable",
     "runtime": "org.freedesktop.Platform",
-    "runtime-version": "1.6",
+    "runtime-version": "18.08",
     "sdk": "org.freedesktop.Sdk",
     "command": "signal",
     "separate-locales": false,
