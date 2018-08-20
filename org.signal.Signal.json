@@ -1,7 +1,7 @@
  {
     "app-id": "org.signal.Signal",
     "base": "io.atom.electron.BaseApp",
-    "base-version": "stable",
+    "base-version": "18.08",
     "runtime": "org.freedesktop.Platform",
     "runtime-version": "18.08",
     "sdk": "org.freedesktop.Sdk",
