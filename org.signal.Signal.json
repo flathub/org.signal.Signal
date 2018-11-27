@@ -37,8 +37,8 @@
                 {
                     "type": "file",
                     "only-arches": ["x86_64"],
-                    "url": "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_1.18.0_amd64.deb",
-                    "sha256": "9b6c3f0e795f94930c239626684d874a2fbad2f85ada36f85ef0dc566629b850"
+                    "url": "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_1.18.1_amd64.deb",
+                    "sha256": "d05526e4b899edfaa73331095f2c653b5ce0b8e9b2ba15763c63beb2a13553bd"
                 },
                 {
                     "type": "script",
