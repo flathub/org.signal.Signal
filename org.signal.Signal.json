@@ -1,4 +1,4 @@
- {
+{
     "app-id": "org.signal.Signal",
     "base": "io.atom.electron.BaseApp",
     "base-version": "18.08",
