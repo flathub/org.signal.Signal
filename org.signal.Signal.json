@@ -28,6 +28,7 @@
                 "tar xf data.tar.xz",
                 "rm -f control.tar.gz data.tar.xz debian-binary",
                 "cp -r usr/* opt/* /app",
+                "rm -rf /app/share/icons/hicolor/1024x1024/",
                 "chmod -R a-s,go+rX,go-w /app/Signal",
                 "sed -i 's|Exec=.*|Exec=signal %U|' /app/share/applications/signal-desktop.desktop",
                 "install signal.sh /app/bin/signal",
