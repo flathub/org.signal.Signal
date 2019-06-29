@@ -16,9 +16,12 @@
         "--share=network",
         "--device=dri",
         "--filesystem=home",
-        "--talk-name=org.freedesktop.Notifications"
+        "--talk-name=org.freedesktop.Notifications",
+        "--talk-name=org.kde.StatusNotifierWatcher"
     ],
     "modules": [
+        "shared-modules/dbus-glib/dbus-glib-0.110.json",
+        "shared-modules/libappindicator/libappindicator-gtk3-introspection-12.10.json",
         {
             "name": "signal-desktop",
             "buildsystem": "simple",
