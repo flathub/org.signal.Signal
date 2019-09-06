@@ -34,7 +34,6 @@
                 "rm -rf /app/share/icons/hicolor/1024x1024/",
                 "chmod -R a-s,go+rX,go-w /app/Signal",
                 "sed -i 's|Exec=.*|Exec=signal %U|' /app/share/applications/signal-desktop.desktop",
-                "chown root /app/Signal/chrome-sandbox",
                 "chmod 4755 /app/Signal/chrome-sandbox",
                 "install signal.sh /app/bin/signal",
                 "install -Dm644 org.signal.Signal.appdata.xml /app/share/appdata/org.signal.Signal.appdata.xml"
