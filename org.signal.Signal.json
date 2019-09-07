@@ -48,7 +48,7 @@
                     "type": "script",
                     "dest-filename": "signal.sh",
                     "commands": [
-                        "exec env TMPDIR=$XDG_CACHE_HOME /app/Signal/signal-desktop \"$@\""
+                        "exec env TMPDIR=$XDG_CACHE_HOME /app/Signal/signal-desktop --no-sandbox \"$@\""
                     ]
                 },
                 {
