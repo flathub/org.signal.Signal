@@ -23,6 +23,16 @@
         "shared-modules/dbus-glib/dbus-glib-0.110.json",
         "shared-modules/libappindicator/libappindicator-gtk3-introspection-12.10.json",
         {
+            "name": "zypak",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/refi64/zypak",
+                    "tag": "v2019.11beta.3"
+                }
+            ]
+        },
+        {
             "name": "signal-desktop",
             "buildsystem": "simple",
             "build-commands": [
@@ -48,7 +58,7 @@
                     "type": "script",
                     "dest-filename": "signal.sh",
                     "commands": [
-                        "exec env TMPDIR=$XDG_CACHE_HOME /app/Signal/signal-desktop --no-sandbox \"$@\""
+                        "exec env TMPDIR=$XDG_CACHE_HOME zypak-wrapper /app/Signal/signal-desktop \"$@\""
                     ]
                 },
                 {
