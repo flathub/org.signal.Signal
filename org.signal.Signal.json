@@ -48,7 +48,8 @@
                     "type": "script",
                     "dest-filename": "signal.sh",
                     "commands": [
-                        "exec env TMPDIR=$XDG_CACHE_HOME /app/Signal/signal-desktop --no-sandbox \"$@\""
+                        "export TMPDIR=\"$XDG_RUNTIME_DIR/app/$FLATPAK_ID\","
+                        "exec zypak-wrapper /app/Signal/signal-desktop \"$@\""
                     ]
                 },
                 {
