@@ -48,7 +48,7 @@
                     "type": "script",
                     "dest-filename": "signal.sh",
                     "commands": [
-                        "export TMPDIR=\"$XDG_RUNTIME_DIR/app/$FLATPAK_ID\","
+                        "export TMPDIR=\"$XDG_RUNTIME_DIR/app/$FLATPAK_ID\"",
                         "exec zypak-wrapper /app/Signal/signal-desktop \"$@\""
                     ]
                 },
