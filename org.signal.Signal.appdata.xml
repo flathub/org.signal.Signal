@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
   <id>org.signal.Signal.desktop</id>
-  <name>Signal</name>
+  <name>Signal Desktop</name>
   <project_license>GPL-3.0</project_license>
   <developer_name>Open Whisper Systems</developer_name>
-  <summary>Private messenger for the desktop</summary>
+  <summary>Private messenger</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <url type="homepage">https://signal.org/</url>
+  <url type="bugtracker">https://github.com/flathub/org.signal.Signal/issues</url>
   <description>
-    <p>Signal is a Free and Open Source instant messenger allowing you to communicate
-    with complete privacy. The messages are end-to-end encrypted and the server 
-      does not store any of your data.</p>
+    <p>
+      <em>To use the Signal desktop app, Signal must first be installed on your phone.</em>
+    </p>
+    <p>
+      Millions of people use Signal every day for free and instantaneous communication 
+      anywhere in the world. Send and receive high-fidelity messages, participate in 
+      HD voice/video calls, and explore a growing set of new features that help you 
+      stay connected. Signal’s advanced privacy-preserving technology is always enabled, 
+      so you can focus on sharing the moments that matter with the people who matter to you. 
+    </p>
+    <p>
+      Signal is a completely independent 501c3 nonprofit. The complete source code for 
+      the Signal clients and the Signal server is available on GitHub.
+    </p>
   </description>
   <screenshots>
-    <screenshot>
-      <image type="source">https://signal.org/blog/images/signal-desktop-splash.png</image>
-    </screenshot>
     <screenshot type="default">
-      <image type="source">https://signal.org/blog/images/signal-desktop-foucault.png</image>
+      <image type="source">https://signal.org/assets/screenshots/download-desktop-mac-2b3294f1801ea725d705f17c6511cd60ee5c5c57664e485deb22f5810e7cdaa1.png</image>
     </screenshot>
   </screenshots>
   <releases>
