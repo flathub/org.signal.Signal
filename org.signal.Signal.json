@@ -41,16 +41,19 @@
             "sources": [
                 {
                     "type": "file",
-                    "only-arches": ["x86_64"],
-                    "url": "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_1.35.1_amd64.deb",
-                    "sha256": "4efaf0981083389148a603c5001aeb11eb1f60eb0927d27a5f5adcec113cb2db",
+                    "only-arches": [
+                        "x86_64"
+                    ],
+                    "url": "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_1.36.1_amd64.deb",
+                    "sha256": "ac9e91aca5487c64c4b5557df587c116b4bea767cb105079e7ae8b97c0338551",
                     "x-checker-data": {
                         "type": "debian-repo",
                         "package-name": "signal-desktop",
                         "root": "https://updates.signal.org/desktop/apt",
                         "dist": "xenial",
                         "component": "main"
-                    }
+                    },
+                    "size": 108956366
                 },
                 {
                     "type": "script",
