@@ -3,11 +3,12 @@
   <id>org.signal.Signal.desktop</id>
   <name>Signal Desktop</name>
   <project_license>GPL-3.0</project_license>
-  <developer_name>Open Whisper Systems</developer_name>
+  <developer_name>Signal Foundation</developer_name>
   <summary>Private messenger</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <url type="homepage">https://signal.org/</url>
   <url type="bugtracker">https://github.com/flathub/org.signal.Signal/issues</url>
+  <url type="donation">https://signal.org/donate/</url>
   <description>
     <p>
       To use the Signal desktop app, Signal must first be installed on your phone.
@@ -22,6 +23,10 @@
     <p>
       Signal is an independent 501c3 nonprofit. The complete source code for 
       the Signal clients and the Signal server is available on GitHub.
+    </p>
+    <p>
+      This flatpak is maintained by the Flathub community, and is not necessarily 
+      endorsed or officially maintained by the upstream developers.
     </p>
   </description>
   <screenshots>
