@@ -50,8 +50,8 @@
                     "only-arches": [
                         "x86_64"
                     ],
-                    "url": "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_1.38.1_amd64.deb",
-                    "sha256": "5f42be33cfcd861d70b0ecffef81fbaef789ce9ed99f1920571d9fa103352434",
+                    "url": "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_1.38.2_amd64.deb",
+                    "sha256": "c496f1c7fc0621ba5661c007b06e8c3e53b3947d1026d130ac9378600e1808d3",
                     "x-checker-data": {
                         "type": "debian-repo",
                         "package-name": "signal-desktop",
@@ -59,7 +59,7 @@
                         "dist": "xenial",
                         "component": "main"
                     },
-                    "size": 110370858
+                    "size": 109679066
                 },
                 {
                     "type": "script",
