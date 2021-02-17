@@ -50,8 +50,8 @@
                     "only-arches": [
                         "x86_64"
                     ],
-                    "url": "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_1.39.6_amd64.deb",
-                    "sha256": "f3d56cebd9e607669f67b10f446cbbe974e298faa56676c802b337c07640cd11",
+                    "url": "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_1.40.0_amd64.deb",
+                    "sha256": "f7e61eb71f6b8a4d842432cd45d4980e2273e3cf67cc7150266c88589342a3f5",
                     "x-checker-data": {
                         "type": "debian-repo",
                         "package-name": "signal-desktop",
