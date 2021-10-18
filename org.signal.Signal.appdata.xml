@@ -32,10 +32,11 @@
   </description>
   <screenshots>
     <screenshot type="default">
-      <image type="source">https://signal.org/assets/screenshots/download-desktop-mac-2b3294f1801ea725d705f17c6511cd60ee5c5c57664e485deb22f5810e7cdaa1.png</image>
+      <image type="source">https://signal.org/assets/screenshots/download-mobile-bdc14a52a345c02611f4a8ac2a2796dfd4f5f2d9cf9abbf2494bd3e244d63035.png</image>
     </screenshot>
   </screenshots>
   <releases>
+    <release version="5.20.0" date="2021-10-14"/>
     <release version="5.19.0" date="2021-10-05"/>
     <release version="5.18.1" date="2021-10-04"/>
     <release version="5.18.0" date="2021-09-29"/>
