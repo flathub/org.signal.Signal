@@ -30,6 +30,11 @@
       endorsed or officially maintained by the upstream developers.
     </p>
   </description>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source">https://signal.org/assets/screenshots/download-desktop-mac-2b3294f1801ea725d705f17c6511cd60ee5c5c57664e485deb22f5810e7cdaa1.png</image>
+    </screenshot>
+  </screenshots>
   <releases>
     <release version="5.20.0" date="2021-10-14"/>
     <release version="5.19.0" date="2021-10-05"/>
