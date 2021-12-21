@@ -44,7 +44,7 @@
                 "chmod -R a-s,go+rX,go-w $FLATPAK_DEST/Signal",
                 "install signal.sh $FLATPAK_DEST/bin/signal",
                 "install -Dm644 -t $FLATPAK_DEST/share/metainfo $FLATPAK_ID.appdata.xml",
-                "desktop-file-edit --set-key=Exec --set-value='signal %U' $FLATPAK_DEST/share/applications/signal-desktop.desktop"
+                "desktop-file-edit --set-key=Exec --set-value='signal --use-tray-icon %U' $FLATPAK_DEST/share/applications/signal-desktop.desktop"
             ],
             "sources": [
                 {
