@@ -68,7 +68,12 @@
                     "dest-filename": "signal.sh",
                     "commands": [
                         "export TMPDIR=\"$XDG_RUNTIME_DIR/app/$FLATPAK_ID\"",
-                        "exec zypak-wrapper /app/Signal/signal-desktop \"$@\""
+                        "if [ -z \"$DISPLAY\" ] && [ -n \"$WAYLAND_DISPLAY\" ]; then",
+                        "EXTRA_ARGS=\"--enable-features=UseOzonePlatform --ozone-platform=wayland\"",
+                        "else",
+                        "EXTRA_ARGS=\"\"",
+                        "fi",
+                        "exec zypak-wrapper /app/Signal/signal-desktop $EXTRA_ARGS \"$@\""
                     ]
                 },
                 {
