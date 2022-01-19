@@ -1,0 +1,71 @@
+app-id: org.signal.Signal
+base: org.electronjs.Electron2.BaseApp
+base-version: '21.08'
+runtime: org.freedesktop.Platform
+runtime-version: '21.08'
+sdk: org.freedesktop.Sdk
+command: signal
+separate-locales: false
+rename-desktop-file: signal-desktop.desktop
+rename-icon: signal-desktop
+finish-args:
+  # X11 performance
+  - "--share=ipc"
+  # Access to X11 (this is a GUI)
+  - "--socket=x11"
+  # Access to wayland
+  - "--socket=wayland"
+  - "--filesystem=xdg-run/pipewire-0"
+  # Audio Access
+  - "--socket=pulseaudio"
+  - "--device=all"
+  # Network Access
+  - "--share=network"
+  # Access to many files
+  - "--filesystem=xdg-desktop"
+  - "--filesystem=xdg-documents"
+  - "--filesystem=xdg-download"
+  - "--filesystem=xdg-music"
+  - "--filesystem=xdg-pictures"
+  - "--filesystem=xdg-public-share"
+  - "--filesystem=xdg-videos"
+  # We need to send notifications
+  - "--talk-name=org.freedesktop.Notifications"
+  - "--talk-name=org.kde.StatusNotifierWatcher"
+  # Allow running in background
+  - "--talk-name=org.freedesktop.portal.Background"
+  # Allow advanced input methods
+  - "--talk-name=org.freedesktop.portal.Fcitx"
+  - "--own-name=org.kde.*"
+
+modules:
+  - name: signal-desktop
+    buildsystem: simple
+    build-commands:
+      - ar x signal-desktop_*.deb
+      - rm -f signal-desktop_*.deb
+      - tar xf data.tar.xz
+      - rm -f control.tar.gz data.tar.xz debian-binary
+      - cp -r usr/* opt/* "${FLATPAK_DEST}"
+      - rm -rf /app/share/icons/hicolor/1024x1024/
+      - rm -rf usr opt
+      - chmod -R a-s,go+rX,go-w "${FLATPAK_DEST}/Signal"
+      - install signal.sh "${FLATPAK_DEST}/bin/signal"
+      - install -Dm644 -t "${FLATPAK_DEST}/share/metainfo" "${FLATPAK_ID}.metainfo.xml"
+      - desktop-file-edit --set-key=Exec --set-value='signal %U' "${FLATPAK_DEST}/share/applications/signal-desktop.desktop"
+    sources:
+      - type: file
+        only-arches:
+          - x86_64
+        url: https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_5.28.0_amd64.deb
+        sha256: 73583062b5aebc9eb59e71ab50987c2bbc97ce4edaa71a5539cb36f9ff336953
+        x-checker-data:
+          type: debian-repo
+          package-name: signal-desktop
+          root: https://updates.signal.org/desktop/apt
+          dist: xenial
+          component: main
+      - type: file
+        path: signal.sh
+      - type: file
+        path: org.signal.Signal.metainfo.xml
