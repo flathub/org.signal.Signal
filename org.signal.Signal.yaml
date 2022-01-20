@@ -10,33 +10,33 @@ rename-desktop-file: signal-desktop.desktop
 rename-icon: signal-desktop
 finish-args:
   # X11 performance
-  - "--share=ipc"
+  - --share=ipc
   # Access to X11 (this is a GUI)
-  - "--socket=x11"
+  - --socket=x11
   # Access to wayland
-  - "--socket=wayland"
-  - "--filesystem=xdg-run/pipewire-0"
+  - --socket=wayland
+  - --filesystem=xdg-run/pipewire-0
   # Audio Access
-  - "--socket=pulseaudio"
-  - "--device=all"
+  - --socket=pulseaudio
+  - --device=all
   # Network Access
-  - "--share=network"
+  - --share=network
   # Access to many files
-  - "--filesystem=xdg-desktop"
-  - "--filesystem=xdg-documents"
-  - "--filesystem=xdg-download"
-  - "--filesystem=xdg-music"
-  - "--filesystem=xdg-pictures"
-  - "--filesystem=xdg-public-share"
-  - "--filesystem=xdg-videos"
+  - --filesystem=xdg-desktop
+  - --filesystem=xdg-documents
+  - --filesystem=xdg-download
+  - --filesystem=xdg-music
+  - --filesystem=xdg-pictures
+  - --filesystem=xdg-public-share
+  - --filesystem=xdg-videos
   # We need to send notifications
-  - "--talk-name=org.freedesktop.Notifications"
-  - "--talk-name=org.kde.StatusNotifierWatcher"
+  - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.kde.StatusNotifierWatcher
   # Allow running in background
-  - "--talk-name=org.freedesktop.portal.Background"
+  - --talk-name=org.freedesktop.portal.Background
   # Allow advanced input methods
-  - "--talk-name=org.freedesktop.portal.Fcitx"
-  - "--own-name=org.kde.*"
+  - --talk-name=org.freedesktop.portal.Fcitx
+  - --own-name=org.kde.*
 
 modules:
   - name: signal-desktop
@@ -57,8 +57,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_5.28.0_amd64.deb
-        sha256: 73583062b5aebc9eb59e71ab50987c2bbc97ce4edaa71a5539cb36f9ff336953
+        url: https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_5.29.0_amd64.deb
+        sha256: 8a2cdeb76c9a3da9baabb1d06e808b484993a440cd4e7510039a763484060906
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop
