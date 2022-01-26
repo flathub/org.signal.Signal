@@ -57,8 +57,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_5.29.0_amd64.deb
-        sha256: 8a2cdeb76c9a3da9baabb1d06e808b484993a440cd4e7510039a763484060906
+        url: https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_5.29.1_amd64.deb
+        sha256: 8caa6400c037b254c55978958c8b97c0eb5687f20ed1465afdd152b0abada6a8
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop
