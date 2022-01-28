@@ -4,7 +4,7 @@ base-version: '21.08'
 runtime: org.freedesktop.Platform
 runtime-version: '21.08'
 sdk: org.freedesktop.Sdk
-command: signal
+command: signal-desktop
 separate-locales: false
 rename-desktop-file: signal-desktop.desktop
 rename-icon: signal-desktop
@@ -36,27 +36,30 @@ finish-args:
   - --talk-name=org.freedesktop.portal.Background
   # Allow advanced input methods
   - --talk-name=org.freedesktop.portal.Fcitx
+  # This is needed for the tray icon
   - --own-name=org.kde.*
 
 modules:
   - name: signal-desktop
     buildsystem: simple
     build-commands:
-      - ar x signal-desktop_*.deb
-      - rm -f signal-desktop_*.deb
-      - tar xf data.tar.xz
-      - rm -f control.tar.gz data.tar.xz debian-binary
-      - cp -r usr/* opt/* "${FLATPAK_DEST}"
-      - rm -rf /app/share/icons/hicolor/1024x1024/
-      - rm -rf usr opt
-      - chmod -R a-s,go+rX,go-w "${FLATPAK_DEST}/Signal"
-      - install signal.sh "${FLATPAK_DEST}/bin/signal"
-      - install -Dm644 -t "${FLATPAK_DEST}/share/metainfo" "${FLATPAK_ID}.metainfo.xml"
-      - desktop-file-edit --set-key=Exec --set-value='signal %U' "${FLATPAK_DEST}/share/applications/signal-desktop.desktop"
+      - install -Dm0755 signal-desktop.sh "${FLATPAK_DEST}/bin/signal-desktop"
+      - install -Dm0644 "${FLATPAK_ID}.metainfo.xml" "${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml"
+      - |
+        bsdtar -Oxf signal-desktop.deb 'data.tar.xz' |
+          bsdtar -xf - \
+            --exclude='./usr/share/doc'
+      - mv opt/* "${FLATPAK_DEST}"
+      - install -Dm0644 "usr/share/applications/signal-desktop.desktop" "${FLATPAK_DEST}/share/applications/signal-desktop.desktop"
+      - desktop-file-edit --set-key=Exec --set-value='signal-desktop %U' "${FLATPAK_DEST}/share/applications/signal-desktop.desktop"
+      - |
+        for size in 16 24 32 48 64 128 256 512; do
+          install -Dm0644 "usr/share/icons/hicolor/${size}x${size}/apps/signal-desktop.png" "${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/signal-desktop.png"
+        done
+      - desktop-file-edit --set-key=Icon --set-value="signal-desktop" "${FLATPAK_DEST}/share/applications/signal-desktop.desktop"
     sources:
       - type: file
-        only-arches:
-          - x86_64
+        dest-filename: signal-desktop.deb
         url: https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_5.29.1_amd64.deb
         sha256: 8caa6400c037b254c55978958c8b97c0eb5687f20ed1465afdd152b0abada6a8
         x-checker-data:
@@ -65,7 +68,9 @@ modules:
           root: https://updates.signal.org/desktop/apt
           dist: xenial
           component: main
+        only-arches:
+          - x86_64
       - type: file
-        path: signal.sh
+        path: signal-desktop.sh
       - type: file
         path: org.signal.Signal.metainfo.xml
