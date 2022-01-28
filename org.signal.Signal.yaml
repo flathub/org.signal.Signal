@@ -4,7 +4,7 @@ base-version: '21.08'
 runtime: org.freedesktop.Platform
 runtime-version: '21.08'
 sdk: org.freedesktop.Sdk
-command: signal
+command: signal-desktop
 separate-locales: false
 rename-desktop-file: signal-desktop.desktop
 rename-icon: signal-desktop
