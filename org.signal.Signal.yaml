@@ -66,6 +66,6 @@ modules:
           dist: xenial
           component: main
       - type: file
-        path: signal.sh
+        path: signal-desktop.sh
       - type: file
         path: org.signal.Signal.metainfo.xml
