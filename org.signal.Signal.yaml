@@ -50,9 +50,9 @@ modules:
       - rm -rf /app/share/icons/hicolor/1024x1024/
       - rm -rf usr opt
       - chmod -R a-s,go+rX,go-w "${FLATPAK_DEST}/Signal"
-      - install signal.sh "${FLATPAK_DEST}/bin/signal"
+      - install signal-desktop.sh "${FLATPAK_DEST}/bin/signal-desktop"
       - install -Dm644 -t "${FLATPAK_DEST}/share/metainfo" "${FLATPAK_ID}.metainfo.xml"
-      - desktop-file-edit --set-key=Exec --set-value='signal %U' "${FLATPAK_DEST}/share/applications/signal-desktop.desktop"
+      - desktop-file-edit --set-key=Exec --set-value='signal-desktop %U' "${FLATPAK_DEST}/share/applications/signal-desktop.desktop"
     sources:
       - type: file
         only-arches:
