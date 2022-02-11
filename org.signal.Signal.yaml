@@ -15,7 +15,6 @@ finish-args:
   - --socket=x11
   # Access to wayland
   - --socket=wayland
-  - --filesystem=xdg-run/pipewire-0
   # Audio Access
   - --socket=pulseaudio
   - --device=all
