@@ -2,6 +2,13 @@
 
 EXTRA_ARGS=()
 
+if [[ -n "${SIGNAL_USE_TRAY_ICON+x}" ]];
+then
+    EXTRA_ARGS+=(
+        "--use-tray-icon"
+    )
+fi
+
 if [[ -z "${DISPLAY}" ]] && [[ -n "${WAYLAND_DISPLAY}" ]];
 then
     EXTRA_ARGS+=(
