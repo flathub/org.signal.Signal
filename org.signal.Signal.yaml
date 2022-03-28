@@ -12,7 +12,7 @@ finish-args:
   # X11 performance
   - --share=ipc
   # Access to X11 (this is a GUI)
-  - --socket=x11
+  - --socket=fallback-x11
   # Access to wayland
   - --socket=wayland
   # Audio Access
