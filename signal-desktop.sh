@@ -8,6 +8,7 @@ then
         "--enable-features=UseOzonePlatform"
         "--ozone-platform=wayland"
         "--disable-gpu"
+        "--enable-features=WaylandWindowDecorations"
     )
 fi
 
