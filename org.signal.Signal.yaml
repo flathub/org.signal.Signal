@@ -11,12 +11,13 @@ rename-icon: signal-desktop
 finish-args:
   # X11 performance
   - --share=ipc
-  # Access to X11 (this is a GUI)
-  - --socket=x11
   # Access to wayland
   - --socket=wayland
+  # Access to X11 if no wayland
+  - --socket=fallback-x11
   # Audio Access
   - --socket=pulseaudio
+  # All devices (camera, video for calls)
   - --device=all
   # Network Access
   - --share=network
