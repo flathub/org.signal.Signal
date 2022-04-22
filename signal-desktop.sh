@@ -2,6 +2,14 @@
 
 EXTRA_ARGS=()
 
+# Special treatment for Wayland
+if [[ "${XDG_SESSION_TYPE}" == "wayland" ]]; then
+    EXTRA_ARGS+=(
+        "--ozone-platform=wayland"
+        "--enable-features=WaylandWindowDecorations"
+    )
+fi
+
 # Additional args for tray icon
 if [[ -n "${SIGNAL_USE_TRAY_ICON+x}" ]]; then
     EXTRA_ARGS+=(
