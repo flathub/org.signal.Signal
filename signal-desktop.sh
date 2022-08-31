@@ -14,6 +14,26 @@ if [[ -n "${SIGNAL_START_IN_TRAY+x}" ]]; then
     )
 fi
 
+if [[ -n "${SIGNAL_USE_WAYLAND+x}" && "${XDG_SESSION_TYPE}" == "wayland" ]]; then
+    EXTRA_ARGS+=(
+        "--enable-features=WaylandWindowDecorations"
+        "--ozone-platform=wayland"
+    )
+fi
+
+if [[ -n "${SIGNAL_DISABLE_GPU+x}" ]]; then
+    EXTRA_ARGS+=(
+        "--disable-gpu"
+    )
+fi
+
+if [[ -n "${SIGNAL_DISABLE_GPU_SANDBOX+x}" ]]; then
+    EXTRA_ARGS+=(
+        "--disable-gpu-sandbox"
+    )
+fi
+
+
 echo "Debug: Will run signal with the following arguments: ${EXTRA_ARGS[@]}"
 echo "Debug: Additionally, user gave: $@"
 

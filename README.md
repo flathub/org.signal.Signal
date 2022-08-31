@@ -15,6 +15,9 @@ You can set the two environment variables:
 
 * `SIGNAL_USE_TRAY_ICON=true`: Enables the tray icon
 * `SIGNAL_START_IN_TRAY=true`: Starts in tray
+* `SIGNAL_USE_WAYLAND=true`: Enables Wayland support
+* `SIGNAL_DISABLE_GPU=true`: Disables GPU acceleration
+* `SIGNAL_DISABLE_GPU_SANDBOX=true`: Disables GPU sandbox
 
 ## Error reporting
 Please only report errors in this repo that are specific to the flatpak version.
@@ -25,11 +28,22 @@ The integration between Chromium, Electron, and Wayland seems broken.
 Adding an additional layer of complexity like Flatpak can't help.
 For now, using this repo with wayland should be regarded as experimental.
 
-The socket is given, however, the special treatment from the launch script was actually never given in the first place.
+Wayland support can be enabled with `SIGNAL_USE_WAYLAND=true` in [Flatseal](https://flathub.org/apps/details/com.github.tchx84.Flatseal).
 
-If you need special features from Wayland, add these to you run script:
+Wayland support can also be enabled on the command line:
 
-* `--ozone-platform=wayland`: Use wayland
-* `--enable-features=WaylandWindowDecorations`: Add window decorations but will break fullscreen and resizing
-* `--disable-gpu`: May be needed
-* `--disable-gpu-sandbox`: May be needed on NVIDIA devices
+```
+$ flatpak override --user --env=SIGNAL_USE_WAYLAND=true org.signal.Signal
+```
+
+GPU acceleration may be need to be disabled:
+
+```
+$ flatpak override --user --env=SIGNAL_DISABLE_GPU=true org.signal.Signal
+```
+
+Additionally, Nvidia devices may need the GPU sandbox disabled:
+
+```
+$ flatpak override --user --env=SIGNAL_DISABLE_GPU_SANDBOX=true org.signal.Signal
+```
