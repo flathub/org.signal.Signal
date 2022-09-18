@@ -23,13 +23,13 @@ finish-args:
   # Network Access
   - --share=network
   # Access to many files
-  - --filesystem=xdg-desktop
-  - --filesystem=xdg-documents
-  - --filesystem=xdg-download
-  - --filesystem=xdg-music
-  - --filesystem=xdg-pictures
-  - --filesystem=xdg-public-share
-  - --filesystem=xdg-videos
+  - --filesystem=xdg-desktop:ro
+  - --filesystem=xdg-documents:ro
+  - --filesystem=xdg-download:ro
+  - --filesystem=xdg-music:ro
+  - --filesystem=xdg-pictures:ro
+  - --filesystem=xdg-public-share:ro
+  - --filesystem=xdg-videos:ro
   # We need to send notifications
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.kde.StatusNotifierWatcher
