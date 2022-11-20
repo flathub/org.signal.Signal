@@ -30,6 +30,8 @@ mkdir builddir
 flatpak-builder --force-clean builddir org.signal.Signal_Beta.yaml
 ```
 
+You can use [this flatpak image](https://github.com/users/cam-rod/packages/container/package/flatpak%2Ftesting-image) for a clean testing environment. The source code is in [pr-image](./pr-image/).
+
 ## Options
 
 You can set the following environment variables:

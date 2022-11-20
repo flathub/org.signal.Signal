@@ -1,0 +1,19 @@
+name: Build flatpak
+run-name: Building ${{ github.ref }} from ${{ github.actor }}, attempt ${{ github.run_attempt }}
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  build-flatpak:
+    runs-on: ubuntu-latest
+    container: ghcr.io/cam-rod/flatpak/pr-image:f37-1.1
+    steps:
+      - name: Clone the PR
+        uses: actions/checkout@v3
+      - name: Build the image
+        run: flatpak-builder --install-deps-from=flathub builddir org.signal.Signal_Beta.yaml
+      - name: Install the image
+        run: flatpak-builder --user --install --force-clean builddir org.signal.Signal_Beta.yaml
+

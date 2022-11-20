@@ -1,0 +1,11 @@
+FROM fedora:37
+LABEL org.opencontainers.image.title "Signal Beta flatpak -  PR image"
+LABEL org.opencontainers.image.authors "Cameron Rodriguez<rod.cam2014+dev@gmail.com>"
+LABEL org.opencontainers.image.description "Image used for testing Signal Beta flatpak builds"
+LABEL org.opencontainers.image.source=https://github.com/cam-rod/org.signal.Signal_Beta
+RUN dnf -y upgrade && dnf -y install wget gnupg flatpak flatpak-builder
+WORKDIR /root
+RUN wget https://flathub.org/repo/flathub.gpg && flatpak remote-add --if-not-exists \
+    --gpg-import=flathub.gpg flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+RUN rm flathub.gpg
+CMD [ "bash" ]
