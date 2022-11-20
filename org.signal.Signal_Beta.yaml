@@ -64,6 +64,7 @@ modules:
           install -Dm0644 "usr/share/icons/hicolor/${size}x${size}/apps/signal-desktop-beta.png" "${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/signal-desktop-beta.png"
         done
       - desktop-file-edit --set-key=Icon --set-value="signal-desktop-beta" "${FLATPAK_DEST}/share/applications/signal-desktop-beta.desktop"
+      - mv ${FLATPAK_DEST}/Signal\ Beta ${FLATPAK_DEST}/Signal_Beta
     sources:
       - type: file
         dest-filename: signal-desktop-beta.deb
