@@ -1,6 +1,6 @@
-# Signal Desktop
+# Signal Desktop Beta
 
-This repo hosts the flatpak version of [Signal-Desktop](https://github.com/signalapp/Signal-Desktop)
+This repo hosts a modified version of the unofficial [Signal flatpak](https://github.com/flathub/org.signal.Signal) to support beta builds of [Signal-Desktop](https://github.com/signalapp/Signal-Desktop).
 
 Signal-Desktop is a Private Messenger that links with your installed Android/iOS version of Signal.
 
@@ -8,10 +8,31 @@ Note that this is an **inofficial** redistribution.
 
 ## Installing
 
-`flatpak install flathub org.signal.Signal`
+```bash
+git clone git@github.com:cam-rod/org.signal.Signal_Beta.git
+cd org.signal.Signal_Beta/
+
+mkdir builddir
+flatpak-builder --install [--system/--user] builddir org.signal.Signal_Beta.yaml
+```
+
+The app will be installed as `Signal Beta`.
+
+## Building
+
+Dependencies are listed in the [manifest file](./org.signal.Signal_Beta.yaml). Also required is [flatpak-builder](https://github.com/flatpak/flatpak-builder).
+
+```bash
+git clone git@github.com:cam-rod/org.signal.Signal_Beta.git
+cd org.signal.Signal_Beta/
+
+mkdir builddir
+flatpak-builder --force-clean builddir org.signal.Signal_Beta.yaml
+```
 
 ## Options
-You can set the two environment variables:
+
+You can set the following environment variables:
 
 * `SIGNAL_USE_TRAY_ICON=1`: Enables the tray icon
 * `SIGNAL_START_IN_TRAY=1`: Starts in tray
@@ -19,11 +40,8 @@ You can set the two environment variables:
 * `SIGNAL_DISABLE_GPU=1`: Disables GPU acceleration
 * `SIGNAL_DISABLE_GPU_SANDBOX=1`: Disables GPU sandbox
 
-## Error reporting
-Please only report errors in this repo that are specific to the flatpak version.
-All other errors should be reported to the upstream repo: https://github.com/signalapp/Signal-Desktop 
+### Wayland
 
-## Wayland
 The integration between Chromium, Electron, and Wayland seems broken.
 Adding an additional layer of complexity like Flatpak can't help.
 For now, using this repo with wayland should be regarded as experimental.
@@ -47,3 +65,7 @@ Additionally, Nvidia devices may need the GPU sandbox disabled:
 ```
 $ flatpak override --user --env=SIGNAL_DISABLE_GPU_SANDBOX=1 org.signal.Signal
 ```
+
+## Issue reporting
+
+Please only report issues in this repo that are specific to the beta version of the flatpak ([view the differences here](https://github.com/flathub/org.signal.Signal/compare/master...cam-rod:org.signal.Signal_Beta:beta)). All other flatpak-specific issues should be reported to the [flatpak repo](https://github.com/flathub/org.signal.Signal), and issues with Signal Beta itself should be reported to [the upstream repo](https://github.com/signalapp/Signal-Desktop).
