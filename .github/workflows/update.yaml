@@ -57,7 +57,7 @@ jobs:
 
       - name: Sync upstream changes
         id: sync
-        uses: aormsby/Fork-Sync-With-Upstream@v3.4
+        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
         with:
           host_domain: 'github.com'
           shallow_since: '3 hours ago'

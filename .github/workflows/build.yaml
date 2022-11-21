@@ -5,6 +5,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     branches-ignore: ['master']
+  push:
+    branches: ['heads/beta']
 
 jobs:
   build-flatpak:
