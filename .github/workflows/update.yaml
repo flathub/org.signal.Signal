@@ -16,7 +16,6 @@ jobs:
 
     permissions:
       contents: read
-      metadata: read
       pull-requests: write
 
     steps:
@@ -48,8 +47,7 @@ jobs:
 
     permissions:
       contents: read
-      metadata: read
-      pull-requests: read|write
+      pull-requests: write
 
     steps:
       - name: Checkout target repo
