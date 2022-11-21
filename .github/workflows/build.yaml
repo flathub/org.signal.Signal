@@ -4,16 +4,20 @@ run-name: Building ${{ github.ref }} from ${{ github.actor }}, attempt ${{ githu
 on:
   pull_request:
     types: [opened, reopened]
+  push:
 
 jobs:
   build-flatpak:
     runs-on: ubuntu-latest
-    container: ghcr.io/cam-rod/flatpak/pr-image:f37-1.1
     steps:
+      - name: Setup flatpak build env
+        run: sudo apt-get -y upgrade && sudo apt-get -y install wget gnupg2 flatpak flatpak-builder
+      - name: Add Flathub repo
+        run: wget https://flathub.org/repo/flathub.gpg && sudo flatpak remote-add --if-not-exists --gpg-import=flathub.gpg flathub https://dl.flathub.org/repo/flathub.flatpakrepo
       - name: Clone the PR
         uses: actions/checkout@v3
       - name: Build the image
-        run: flatpak-builder --install-deps-from=flathub builddir org.signal.Signal_Beta.yaml
+        run: sudo flatpak-builder --install-deps-from=flathub builddir org.signal.Signal_Beta.yaml
       - name: Install the image
-        run: flatpak-builder --user --install --force-clean builddir org.signal.Signal_Beta.yaml
+        run: sudo flatpak-builder --system --install --force-clean builddir org.signal.Signal_Beta.yaml
 

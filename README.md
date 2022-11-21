@@ -13,7 +13,7 @@ git clone git@github.com:cam-rod/org.signal.Signal_Beta.git
 cd org.signal.Signal_Beta/
 
 mkdir builddir
-flatpak-builder --install [--system/--user] builddir org.signal.Signal_Beta.yaml
+flatpak-builder --install [--system/--user] --install-deps-from=flathub --force-clean builddir org.signal.Signal_Beta.yaml
 ```
 
 The app will be installed as `Signal Beta`.
@@ -27,10 +27,8 @@ git clone git@github.com:cam-rod/org.signal.Signal_Beta.git
 cd org.signal.Signal_Beta/
 
 mkdir builddir
-flatpak-builder --force-clean builddir org.signal.Signal_Beta.yaml
+flatpak-builder --force-clean --install-deps-from=flathub builddir org.signal.Signal_Beta.yaml
 ```
-
-You can use [this flatpak image](https://github.com/users/cam-rod/packages/container/package/flatpak%2Ftesting-image) for a clean testing environment. The source code is in [pr-image](./pr-image/).
 
 ## Options
 
