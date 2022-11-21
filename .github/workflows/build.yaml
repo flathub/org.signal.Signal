@@ -6,12 +6,12 @@ on:
     types: [opened, synchronize, reopened]
     branches-ignore: ['master']
   push:
-    branches: ['heads/beta']
+    branches: ['beta']
 
 jobs:
   build-flatpak:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.state == 'open'
+    if: github.event.pull_request.state == 'open' || github.event.ref =='ref/heads/beta'
     steps:
       - name: Setup flatpak build env
         run: sudo apt-get -y upgrade && sudo apt-get -y install wget gnupg2 flatpak flatpak-builder
