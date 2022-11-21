@@ -1,5 +1,7 @@
 # Signal Desktop Beta
 
+![Status badge for most recent build](https://github.com/cam-rod/org.signal.Signal_Beta/actions/workflows/build.yaml/badge.svg?branch=beta&event=push) ![Status badge for update checks](https://github.com/cam-rod/org.signal.Signal_Beta/actions/workflows/update.yaml/badge.svg?branch=beta)
+
 This repo hosts a modified version of the unofficial [Signal flatpak](https://github.com/flathub/org.signal.Signal) to support beta builds of [Signal-Desktop](https://github.com/signalapp/Signal-Desktop).
 
 Signal-Desktop is a Private Messenger that links with your installed Android/iOS version of Signal.
