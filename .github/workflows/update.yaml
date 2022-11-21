@@ -1,25 +1,32 @@
 # From https://github.com/flathub/flatpak-external-data-checker
 name: Check for updates
-run-name: Check for Signal Beta updates 
 on:
   schedule:
   - cron: "47 * * * *" # run every hour
-  workflow_dispatch: # can be manually dispatched under GitHub's "Actions" tab 
+  workflow_dispatch: # can be manually dispatched under GitHub's "Actions" tab
 
 jobs:
   flatpak-external-data-checker:
+    name: Check for updates to Signal Beta and open PR
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         branch: [ beta ]
-    
+
+    permissions:
+      contents: read
+      metadata: read
+      pull-requests: write
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout target branch
+        uses: actions/checkout@v3
         with:
           ref: ${{ matrix.branch }}
 
-      - uses: docker://ghcr.io/flathub/flatpak-external-data-checker:latest
+      - name: Checkout target branch
+        uses: docker://ghcr.io/flathub/flatpak-external-data-checker:latest
         env:
           GIT_AUTHOR_NAME: Flatpak External Data Checker
           GIT_COMMITTER_NAME: Flatpak External Data Checker
@@ -30,3 +37,36 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           args: --update --never-fork org.signal.Signal_Beta.yaml # e.g. com.organization.myapp.json
+
+  sync-master:
+    name: Sync master with upstream
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        branch: [ master ]
+
+    permissions:
+      contents: read
+      metadata: read
+      pull-requests: read|write
+
+    steps:
+      - name: Checkout target repo
+        uses: actions/checkout@v3
+        with:
+          ref: master
+
+      - name: Sync upstream changes
+        id: sync
+        uses: aormsby/Fork-Sync-With-Upstream@v3.4
+        with:
+          host_domain: 'github.com'
+          shallow_since: '3 hours ago'
+          target_sync_branch: master
+          target_repo_token: ${{ secrets.GITHUB_TOKEN }}
+          upstream_sync_repo: 'flathub/org.signal.Signal'
+          upstream_sync_branch: master
+          git_config_user: 'GitHub Actions - Upstream Sync'
+          git_config_email: '41898282+github-actions[bot]@users.noreply.github.com'
+

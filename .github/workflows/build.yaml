@@ -3,12 +3,13 @@ run-name: Building ${{ github.ref }} from ${{ github.actor }}, attempt ${{ githu
 
 on:
   pull_request:
-    types: [opened, reopened]
-  push:
+    types: [opened, synchronize, reopened]
+    branches-ignore: ['master']
 
 jobs:
   build-flatpak:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.state == 'open'
     steps:
       - name: Setup flatpak build env
         run: sudo apt-get -y upgrade && sudo apt-get -y install wget gnupg2 flatpak flatpak-builder
