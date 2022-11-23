@@ -2,13 +2,27 @@
 
 ![Status badge for most recent build](https://github.com/cam-rod/org.signal.Signal_Beta/actions/workflows/build.yaml/badge.svg?branch=beta&event=push) ![Status badge for update checks](https://github.com/cam-rod/org.signal.Signal_Beta/actions/workflows/update.yaml/badge.svg?branch=beta)
 
-This repo hosts a modified version of the unofficial [Signal flatpak](https://github.com/flathub/org.signal.Signal) to support beta builds of [Signal-Desktop](https://github.com/signalapp/Signal-Desktop).
+This repo hosts a modified version of the **unofficial** [Signal flatpak](https://github.com/flathub/org.signal.Signal) to support beta builds of [Signal-Desktop](https://github.com/signalapp/Signal-Desktop).
 
 Signal-Desktop is a Private Messenger that links with your installed Android/iOS version of Signal.
 
-Note that this is an **inofficial** redistribution.
-
 ## Installing
+
+The app will be installed as `Signal Beta`.
+
+### From Flatpak bundle
+
+Go to the [build action](https://github.com/cam-rod/org.signal.Signal_Beta/actions/workflows/build.yaml?query=branch%3Abeta+is%3Asuccess) and select the most recent run, then download the artifact. Then install the bundle:
+
+```bash
+unzip signal-desktop-beta-v<version_number>.zip && pushd signal-desktop-beta-v<version_number>/
+chmod +x org.signal.Signal_Beta.flatpak
+flatpak install ./org.signal.Signal_Beta.flatpak
+```
+
+If the artifact is not available, you can build from source with the following section.
+
+### From source
 
 ```bash
 git clone git@github.com:cam-rod/org.signal.Signal_Beta.git
@@ -17,8 +31,6 @@ cd org.signal.Signal_Beta/
 mkdir builddir
 flatpak-builder --install [--system/--user] --install-deps-from=flathub --force-clean builddir org.signal.Signal_Beta.yaml
 ```
-
-The app will be installed as `Signal Beta`.
 
 ## Building
 

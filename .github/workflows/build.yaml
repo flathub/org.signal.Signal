@@ -1,5 +1,7 @@
 name: Build flatpak
 run-name: Building ${{ github.ref }} from ${{ github.actor }}
+env:
+  SIGNAL_FLATPAK: org.signal.Signal_Beta
 
 on:
   pull_request:
@@ -19,8 +21,20 @@ jobs:
         run: wget https://flathub.org/repo/flathub.gpg && sudo flatpak remote-add --if-not-exists --gpg-import=flathub.gpg flathub https://dl.flathub.org/repo/flathub.flatpakrepo
       - name: Clone the PR
         uses: actions/checkout@v3
+
+      - name: Save app version
+        run: SIGNAL_V=$(perl -ne '/(?<=signal\-desktop\-beta\_)([a-zA-Z0-9_\-.]*?)(?=_amd64)/ && print "$1"' < "$SIGNAL_FLATPAK.yaml") && echo "SIGNAL_VERSION=$SIGNAL_V" >> "$GITHUB_ENV"
       - name: Build the image
-        run: sudo flatpak-builder --install-deps-from=flathub builddir org.signal.Signal_Beta.yaml
+        run: sudo flatpak-builder --install-deps-from=flathub --repo=repo builddir "$SIGNAL_FLATPAK.yaml"
       - name: Install the image
-        run: sudo flatpak-builder --system --install --force-clean builddir org.signal.Signal_Beta.yaml
+        run: sudo flatpak install --noninteractive ./repo "$SIGNAL_FLATPAK"
+
+      - name: Generate single-file bundle
+        run: sudo flatpak build-bundle ./repo "$SIGNAL_FLATPAK.flatpak" "$SIGNAL_FLATPAK" && sudo chmod 777 "./$SIGNAL_FLATPAK.flatpak"
+      - name: Upload bundle as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: signal-desktop-beta-v${{ env.SIGNAL_VERSION }}
+          path: ./${{ env.SIGNAL_FLATPAK }}.flatpak
+          if-no-files-found: error
 
