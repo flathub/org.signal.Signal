@@ -12,10 +12,10 @@ The app will be installed as `Signal Beta`.
 
 ### From Flatpak bundle
 
-Go to the [build action](https://github.com/cam-rod/org.signal.Signal_Beta/actions/workflows/build.yaml?query=branch%3Abeta+is%3Asuccess) and select the most recent run, then download the artifact. Then install the bundle:
+Go to the [build action](https://github.com/cam-rod/org.signal.Signal_Beta/actions/workflows/build.yaml?query=branch%3Abeta+is%3Acompleted) and select the most recent _successful_ run, then download the artifact at the bottom of the page. Install the bundle as follows:
 
 ```bash
-unzip signal-desktop-beta-v<version_number>.zip && pushd signal-desktop-beta-v<version_number>/
+unzip signal-desktop-beta-v<version_number>.zip && cd signal-desktop-beta-v<version_number>/
 chmod +x org.signal.Signal_Beta.flatpak
 flatpak install ./org.signal.Signal_Beta.flatpak
 ```
