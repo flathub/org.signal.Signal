@@ -1,5 +1,5 @@
 name: Build flatpak
-run-name: Building ${{ github.ref }} from ${{ github.actor }}, attempt ${{ github.run_attempt }}
+run-name: Building ${{ github.ref }} from ${{ github.actor }}
 
 on:
   pull_request:
