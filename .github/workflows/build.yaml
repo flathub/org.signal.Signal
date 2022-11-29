@@ -6,9 +6,10 @@ env:
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    branches-ignore: ['master']
+    branches: [beta]
   push:
-    branches: ['beta']
+    branches: [beta]
+  workflow_dispatch:
 
 jobs:
   build-flatpak:
