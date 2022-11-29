@@ -38,6 +38,7 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="6.0.0-beta.3" date="2022-11-29"/>
     <release version="6.0.0-beta.2" date="2022-11-20"/>
   </releases>
   <content_rating type="oars-1.1">
@@ -50,4 +51,3 @@
   </provides>
   <update_contact>rod.cam2014+dev@gmail.com</update_contact>
 </component>
-

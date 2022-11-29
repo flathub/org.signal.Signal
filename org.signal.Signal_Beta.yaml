@@ -8,7 +8,7 @@ command: signal-desktop-beta
 separate-locales: false
 rename-desktop-file: signal-desktop-beta.desktop
 rename-icon: signal-desktop-beta
-tags: ['beta']
+tags: [beta]
 finish-args:
   # X11 performance
   - --share=ipc
@@ -68,8 +68,8 @@ modules:
     sources:
       - type: file
         dest-filename: signal-desktop-beta.deb
-        url: https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop-beta/signal-desktop-beta_6.0.0-beta.2_amd64.deb
-        sha256: 126dc980595c41335e7c5c89823bd82bfdb7a2d8a35d572a3be7272f66a12792
+        url: https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop-beta/signal-desktop-beta_6.0.0-beta.3_amd64.deb
+        sha256: b563e2583d7b0b2a6aef9078d855d7554556dedb02637166220db9c110f721c0
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop-beta
