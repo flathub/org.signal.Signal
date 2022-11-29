@@ -14,10 +14,6 @@ jobs:
       matrix:
         branch: [ beta ]
 
-    permissions:
-      contents: read
-      pull-requests: write
-
     steps:
       - name: Checkout target branch
         uses: actions/checkout@v3
@@ -44,10 +40,6 @@ jobs:
     strategy:
       matrix:
         branch: [ master ]
-
-    permissions:
-      contents: read
-      pull-requests: write
 
     steps:
       - name: Checkout target repo
