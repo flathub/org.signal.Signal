@@ -22,6 +22,8 @@ jobs:
         run: wget https://flathub.org/repo/flathub.gpg && sudo flatpak remote-add --if-not-exists --gpg-import=flathub.gpg flathub https://dl.flathub.org/repo/flathub.flatpakrepo
       - name: Clone the PR
         uses: actions/checkout@v3
+        with:
+          token: '${{ secrets.SIGNAL_BETA_UPDATE_TOKEN }}'
 
       - name: Save app version
         run: SIGNAL_V=$(perl -ne '/(?<=signal\-desktop\-beta\_)([a-zA-Z0-9_\-.]*?)(?=_amd64)/ && print "$1"' < "$SIGNAL_FLATPAK.yaml") && echo "SIGNAL_VERSION=$SIGNAL_V" >> "$GITHUB_ENV"

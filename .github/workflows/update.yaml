@@ -19,6 +19,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ matrix.branch }}
+          token: ${{ secrets.SIGNAL_BETA_UPDATE_TOKEN }}
 
       - name: Checkout target branch
         uses: docker://ghcr.io/flathub/flatpak-external-data-checker:latest
@@ -46,6 +47,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: master
+          token: '${{ secrets.SIGNAL_BETA_UPDATE_TOKEN }}'
 
       - name: Sync upstream changes
         id: sync
@@ -54,7 +56,7 @@ jobs:
           host_domain: 'github.com'
           shallow_since: '3 hours ago'
           target_sync_branch: master
-          target_repo_token: ${{ secrets.GITHUB_TOKEN }}
+          target_repo_token: ${{ secrets.SIGNAL_BETA_MERGE_TOKEN }}
           upstream_sync_repo: 'flathub/org.signal.Signal'
           upstream_sync_branch: master
           git_config_user: 'GitHub Actions - Upstream Sync'
