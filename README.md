@@ -1,6 +1,6 @@
 # Signal Desktop Beta
 
-![Status badge for most recent build](https://github.com/cam-rod/org.signal.Signal_Beta/actions/workflows/build.yaml/badge.svg?branch=beta&event=push) ![Status badge for update checks](https://github.com/cam-rod/org.signal.Signal_Beta/actions/workflows/update.yaml/badge.svg?branch=beta)
+<a href="https://github.com/cam-rod/org.signal.Signal_Beta/actions/workflows/build.yaml?query=branch%3Abeta+event%3Apush"><img src="https://github.com/cam-rod/org.signal.Signal_Beta/actions/workflows/build.yaml/badge.svg?branch=beta&event=push" alt="Status badge for most recent build" title="View the most recent builds"/></a> <a href="https://github.com/cam-rod/org.signal.Signal_Beta/actions/workflows/update.yaml?query=branch%3Abeta"><img src="https://github.com/cam-rod/org.signal.Signal_Beta/actions/workflows/update.yaml/badge.svg?branch=beta" alt="Status badge for update checks" title="View the most recent update checks"/></a>
 
 This repo hosts a modified version of the **unofficial** [Signal flatpak](https://github.com/flathub/org.signal.Signal) to support beta builds of [Signal-Desktop](https://github.com/signalapp/Signal-Desktop).
 

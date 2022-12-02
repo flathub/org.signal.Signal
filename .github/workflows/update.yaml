@@ -19,18 +19,18 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ matrix.branch }}
-          token: ${{ secrets.SIGNAL_BETA_UPDATE_TOKEN }}
+          token: ${{ secrets.SIGNAL_BETA_BUILD_TOKEN }}
 
       - name: Checkout target branch
         uses: docker://ghcr.io/flathub/flatpak-external-data-checker:latest
         env:
           GIT_AUTHOR_NAME: Flatpak External Data Checker
-          GIT_COMMITTER_NAME: Flatpak External Data Checker
+          GIT_COMMITTER_NAME: Camshaft Bot
           # email sets "github-actions[bot]" as commit author, see https://github.community/t/github-actions-bot-email-address/17204/6
           GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
-          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
-          EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
-          GITHUB_TOKEN: ${{ secrets.SIGNAL_BETA_UPDATE_TOKEN }}
+          GIT_COMMITTER_EMAIL: rod.cam2014+camshaftrod@gmail.com
+          EMAIL: rod.cam2014+camshaftrod@gmail.com
+          GITHUB_TOKEN: ${{ secrets.SIGNAL_BETA_PR_TOKEN }}
         with:
           args: --update --never-fork org.signal.Signal_Beta.yaml # e.g. com.organization.myapp.json
 
@@ -47,18 +47,16 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: master
-          token: '${{ secrets.SIGNAL_BETA_UPDATE_TOKEN }}'
+          token: '${{ secrets.SIGNAL_BETA_BUILD_TOKEN }}'
 
       - name: Sync upstream changes
         id: sync
         uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
         with:
-          host_domain: 'github.com'
-          shallow_since: '3 hours ago'
           target_sync_branch: master
-          target_repo_token: ${{ secrets.SIGNAL_BETA_MERGE_TOKEN }}
+          target_repo_token: ${{ secrets.SIGNAL_BETA_PR_TOKEN }}
           upstream_sync_repo: 'flathub/org.signal.Signal'
           upstream_sync_branch: master
-          git_config_user: 'GitHub Actions - Upstream Sync'
-          git_config_email: '41898282+github-actions[bot]@users.noreply.github.com'
+          git_config_user: 'Camshaft Bot - Upstream Sync'
+          git_config_email: 'rod.cam2014+camshaftrod@gmail.com'
 
