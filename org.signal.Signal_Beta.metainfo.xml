@@ -38,6 +38,7 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="6.1.0-beta.1" date="2022-12-01"/>
     <release version="6.0.0-beta.4" date="2022-11-30"/>
     <release version="6.0.0-beta.3" date="2022-11-29"/>
     <release version="6.0.0-beta.2" date="2022-11-20"/>
