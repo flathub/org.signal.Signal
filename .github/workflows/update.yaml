@@ -20,6 +20,7 @@ jobs:
         with:
           ref: ${{ matrix.branch }}
           token: ${{ secrets.SIGNAL_BETA_BUILD_TOKEN }}
+          persist-credentials: false
 
       - name: Checkout target branch
         uses: docker://ghcr.io/flathub/flatpak-external-data-checker:latest
@@ -48,6 +49,7 @@ jobs:
         with:
           ref: master
           token: '${{ secrets.SIGNAL_BETA_BUILD_TOKEN }}'
+          persist-credentials: false
 
       - name: Sync upstream changes
         id: sync
