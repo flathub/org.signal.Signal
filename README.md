@@ -19,10 +19,6 @@ You can set the two environment variables:
 * `SIGNAL_DISABLE_GPU=1`: Disables GPU acceleration
 * `SIGNAL_DISABLE_GPU_SANDBOX=1`: Disables GPU sandbox
 
-## Error reporting
-Please only report errors in this repo that are specific to the flatpak version.
-All other errors should be reported to the upstream repo: https://github.com/signalapp/Signal-Desktop 
-
 ## Wayland
 The integration between Chromium, Electron, and Wayland seems broken.
 Adding an additional layer of complexity like Flatpak can't help.
