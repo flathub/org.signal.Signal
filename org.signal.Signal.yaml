@@ -16,8 +16,6 @@ finish-args:
   - --socket=x11
   # Access to wayland
   - --socket=wayland
-  # Access to X11 if no wayland
-  - --socket=fallback-x11
   # Audio Access
   - --socket=pulseaudio
   # All devices (camera, microphone for calls)

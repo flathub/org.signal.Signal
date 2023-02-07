@@ -39,24 +39,26 @@ Wayland support can be enabled with `SIGNAL_USE_WAYLAND=1` in [Flatseal](https:/
 Wayland support can also be enabled on the command line:
 
 ```bash
-$ flatpak override --user --env=SIGNAL_USE_WAYLAND=1 org.signal.Signal
+flatpak override --user --env=SIGNAL_USE_WAYLAND=1 org.signal.Signal
 ```
 
 GPU acceleration may be need to be disabled:
 
 ```bash
-$ flatpak override --user --env=SIGNAL_DISABLE_GPU=1 org.signal.Signal
+flatpak override --user --env=SIGNAL_DISABLE_GPU=1 org.signal.Signal
 ```
 
 Additionally, Nvidia devices may need the GPU sandbox disabled:
 
 ```bash
-$ flatpak override --user --env=SIGNAL_DISABLE_GPU_SANDBOX=1 org.signal.Signal
+flatpak override --user --env=SIGNAL_DISABLE_GPU_SANDBOX=1 org.signal.Signal
 ```
 
 ## Issue reporting
 
 **Please only report issues in this repo that are specific to the flatpak version.**
 
-Any issues associated with a beta release should be reported to the [Signal community forum](https://community.signalusers.org/c/beta-feedback/25), under the topic _Beta feedback for the upcoming Desktop <MAJOR>.<MINOR> release_. Issues that can be replicated in a stable release should be reported in the [upstream repo](https://github.com/signalapp/Signal-Desktop).
+Issues that can be replicated in a stable release should be reported in the [upstream repo](https://github.com/signalapp/Signal-Desktop).
+Make sure, that the reported issue is **not** flatpak-related.
 
+Any issues associated with a beta release should be reported to the [Signal community forum](https://community.signalusers.org/c/beta-feedback/25), under the topic _Beta feedback for the upcoming Desktop <MAJOR>.<MINOR> release_. Issues that can be replicated in a stable release should be reported in the [upstream repo](https://github.com/signalapp/Signal-Desktop).
