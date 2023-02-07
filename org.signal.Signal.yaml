@@ -41,6 +41,7 @@ finish-args:
   # Allow advanced input methods
   - --talk-name=org.freedesktop.portal.Fcitx
   # This is needed for the tray icon
+  - --own-name=org.kde.*
   - --env=SIGNAL_USE_TRAY_ICON=0
   - --env=SIGNAL_START_IN_TRAY=0
   - --env=SIGNAL_USE_WAYLAND=0
