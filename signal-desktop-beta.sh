@@ -44,4 +44,4 @@ echo "Debug: Will run signal with the following arguments: ${EXTRA_ARGS[@]}"
 echo "Debug: Additionally, user gave: $@"
 
 export TMPDIR="${XDG_RUNTIME_DIR}/app/${FLATPAK_ID}"
-exec zypak-wrapper /app/Signal/signal-desktop "${EXTRA_ARGS[@]}" "$@"
+exec zypak-wrapper /app/Signal_Beta/signal-desktop-beta "${EXTRA_ARGS[@]}" "$@"
