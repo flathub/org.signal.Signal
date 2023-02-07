@@ -16,6 +16,7 @@ finish-args:
   # Access to wayland
   - --socket=wayland
   # Access to X11 if no wayland
+  - --socket=fallback-x11
   # Audio Access
   - --socket=pulseaudio
   # All devices (camera, video for calls)
@@ -32,13 +33,16 @@ finish-args:
   - --filesystem=xdg-videos
   # We need to send notifications
   - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.gnome.Mutter.IdleMonitor
   - --talk-name=org.kde.StatusNotifierWatcher
+  - --talk-name=com.canonical.AppMenu.Registrar
+  - --talk-name=com.canonical.indicator.application
+  - --talk-name=org.ayatana.indicator.application
   # Allow running in background
   - --talk-name=org.freedesktop.portal.Background
   # Allow advanced input methods
   - --talk-name=org.freedesktop.portal.Fcitx
   # This is needed for the tray icon
-  - --own-name=org.kde.*
   - --env=SIGNAL_USE_TRAY_ICON=0
   - --env=SIGNAL_START_IN_TRAY=0
   - --env=SIGNAL_USE_WAYLAND=0
