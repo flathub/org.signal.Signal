@@ -8,10 +8,12 @@ Note that this is an **unofficial** redistribution.
 
 ## Installing
 
-`flatpak install flathub org.signal.Signal`
+```bash
+flatpak install flathub org.signal.Signal
+```
 
 ## Options
-You can set the two environment variables:
+You can set the following environment variables:
 
 * `SIGNAL_USE_TRAY_ICON=1`: Enables the tray icon
 * `SIGNAL_START_IN_TRAY=1`: Starts in tray
