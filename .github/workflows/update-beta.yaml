@@ -19,8 +19,6 @@ jobs:
         with:
           ref: ${{ matrix.branch }}
 
-      - run: git config --system --add safe.directory /github/workspace
-
       - uses: docker://ghcr.io/flathub/flatpak-external-data-checker:latest
         env:
           GIT_AUTHOR_NAME: Flatpak External Data Checker
@@ -30,4 +28,9 @@ jobs:
           EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: --update --never-fork org.signal.Signal.yaml
+          entrypoint: /bin/bash
+          args: |
+            git config --global --add safe.directory /github/workspace
+            
+            /app/flatpak-external-data-checker --update --never-fork org.signal.Signal.yaml
+            
