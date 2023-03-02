@@ -28,7 +28,7 @@ You can set the following environment variables:
 * `SIGNAL_DISABLE_GPU=1`: Disables GPU acceleration
 * `SIGNAL_DISABLE_GPU_SANDBOX=1`: Disables GPU sandbox
 
-### Wayland
+## Wayland
 
 The integration between Chromium, Electron, and Wayland seems broken.
 Adding an additional layer of complexity like Flatpak can't help.
