@@ -19,6 +19,8 @@ jobs:
         with:
           ref: ${{ matrix.branch }}
 
+      - run: git config --system --add safe.directory /github/workspace
+
       - uses: docker://ghcr.io/flathub/flatpak-external-data-checker:latest
         env:
           GIT_AUTHOR_NAME: Flatpak External Data Checker
