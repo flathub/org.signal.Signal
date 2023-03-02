@@ -29,11 +29,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           entrypoint: /bin/bash
-          args: >
-            -c
-            echo "$(id -u):$(id -g)" \
-            &&
-            git config --global --add safe.directory /github/workspace
-            &&
-            /app/flatpak-external-data-checker --update --never-fork org.signal.Signal.yaml
-            
+          args: -c id        
