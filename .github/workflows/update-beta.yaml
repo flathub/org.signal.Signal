@@ -28,5 +28,6 @@ jobs:
           EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          entrypoint: /bin/bash
-          args: -c "git config --global --add safe.directory /github/workspace && cd /github/workspace && /app/flatpak-external-data-checker --update --never-fork org.signal.Signal.yaml"
+          args: --update --never-fork org.signal.Signal.yaml
+
+
