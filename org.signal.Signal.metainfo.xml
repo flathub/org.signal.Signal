@@ -2,7 +2,7 @@
 <component type="desktop">
   <id>org.signal.Signal.desktop</id>
   <name>Signal Desktop</name>
-  <project_license>AGPL-3.0</project_license>
+  <project_license>AGPL-3.0-only</project_license>
   <developer_name>Signal Foundation</developer_name>
   <summary>Private messenger</summary>
   <metadata_license>CC0-1.0</metadata_license>
