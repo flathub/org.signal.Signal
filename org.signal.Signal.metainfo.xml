@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-  <id>org.signal.Signal.desktop</id>
+  <id>org.signal.Signal</id>
   <name>Signal Desktop</name>
   <project_license>AGPL-3.0-only</project_license>
   <developer_name>Signal Foundation</developer_name>
