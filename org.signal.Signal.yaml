@@ -23,6 +23,7 @@ finish-args:
   - --share=network
   # We need to be able to inhibit sleep
   - --system-talk-name=org.freedesktop.login1
+  - --system-talk-name=org.freedesktop.login1.Manager
   # We need to send notifications
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.gnome.Mutter.IdleMonitor
