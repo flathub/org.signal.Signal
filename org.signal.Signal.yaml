@@ -17,6 +17,8 @@ finish-args:
   - --socket=wayland
   # Audio Access
   - --socket=pulseaudio
+  # System bus access
+  - --socket=system-bus
   # All devices (camera, video for calls)
   - --device=all
   # Network Access
