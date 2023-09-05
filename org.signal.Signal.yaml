@@ -17,12 +17,12 @@ finish-args:
   - --socket=wayland
   # Audio Access
   - --socket=pulseaudio
-  # System bus access
-  - --socket=system-bus
   # All devices (camera, video for calls)
   - --device=all
   # Network Access
   - --share=network
+  # We need to be able to inhibit sleep
+  - --system-talk-name=org.freedesktop.login1.Manager
   # We need to send notifications
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.gnome.Mutter.IdleMonitor
