@@ -35,7 +35,6 @@ finish-args:
   - --talk-name=org.freedesktop.portal.Background
   # Allow advanced input methods
   - --talk-name=org.freedesktop.portal.Fcitx
-  # This is needed for the tray icon
   - --env=SIGNAL_USE_TRAY_ICON=0
   - --env=SIGNAL_START_IN_TRAY=0
   - --env=SIGNAL_USE_WAYLAND=0
