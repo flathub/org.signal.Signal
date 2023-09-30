@@ -29,8 +29,6 @@ finish-args:
   - --talk-name=com.canonical.AppMenu.Registrar
   - --talk-name=com.canonical.indicator.application
   - --talk-name=org.ayatana.indicator.application
-  # Allow running in background
-  - --talk-name=org.freedesktop.portal.Background
   # Allow advanced input methods
   - --talk-name=org.freedesktop.portal.Fcitx
   - --env=SIGNAL_USE_TRAY_ICON=0
