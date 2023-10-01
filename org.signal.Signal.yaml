@@ -24,6 +24,7 @@ finish-args:
   - --share=network
   # We need to be able to inhibit sleep
   - --system-talk-name=org.freedesktop.login1
+  # These are for notifications/tray icons
   - --talk-name=org.gnome.Mutter.IdleMonitor
   - --talk-name=org.kde.StatusNotifierWatcher
   - --talk-name=com.canonical.AppMenu.Registrar
@@ -31,6 +32,7 @@ finish-args:
   - --talk-name=org.ayatana.indicator.application
   # Allow advanced input methods
   - --talk-name=org.freedesktop.portal.Fcitx
+  # Custom env vars specific to flatpak
   - --env=SIGNAL_USE_TRAY_ICON=0
   - --env=SIGNAL_START_IN_TRAY=0
   - --env=SIGNAL_USE_WAYLAND=0
