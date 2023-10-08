@@ -11,8 +11,8 @@ rename-icon: signal-desktop
 finish-args:
   # X11 performance
   - --share=ipc
-  # We need X11
-  - --socket=x11
+  # We need X11 if there's no wayland
+  - --socket=fallback-x11
   # Access to wayland
   - --socket=wayland
   # Audio Access
