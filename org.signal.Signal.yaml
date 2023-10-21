@@ -24,6 +24,9 @@ finish-args:
   - --share=network
   # We need to be able to inhibit sleep
   - --system-talk-name=org.freedesktop.login1
+  - --talk-name=org.gnome.SessionManager
+  - --talk-name=org.freedesktop.PowerManagement
+  - --talk-name=org.freedesktop.ScreenSaver
   # These are for notifications/tray icons
   - --talk-name=org.gnome.Mutter.IdleMonitor
   - --talk-name=org.kde.StatusNotifierWatcher
