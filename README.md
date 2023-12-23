@@ -17,23 +17,10 @@ You can set the following environment variables:
 
 * `SIGNAL_USE_TRAY_ICON=1`: Enables the tray icon
 * `SIGNAL_START_IN_TRAY=1`: Starts in tray
-* `SIGNAL_USE_WAYLAND=1`: Enables Wayland support
 * `SIGNAL_DISABLE_GPU=1`: Disables GPU acceleration
 * `SIGNAL_DISABLE_GPU_SANDBOX=1`: Disables GPU sandbox
 
 ## Wayland
-The integration between Chromium, Electron, and Wayland seems broken.
-Adding an additional layer of complexity like Flatpak can't help.
-For now, using this repo with wayland should be regarded as experimental.
-
-Wayland support can be enabled with `SIGNAL_USE_WAYLAND=1` in [Flatseal](https://flathub.org/apps/details/com.github.tchx84.Flatseal).
-
-Wayland support can also be enabled on the command line:
-
-```bash
-flatpak override --user --env=SIGNAL_USE_WAYLAND=1 org.signal.Signal
-```
-
 GPU acceleration may be need to be disabled:
 
 ```bash
