@@ -13,7 +13,7 @@ finish-args:
   # X11 performance
   - --share=ipc
   # We need X11
-  - --socket=x11
+  - --socket=fallback-x11
   # Access to wayland
   - --socket=wayland
   # Audio Access
@@ -38,7 +38,6 @@ finish-args:
   # Custom env vars specific to flatpak
   - --env=SIGNAL_USE_TRAY_ICON=0
   - --env=SIGNAL_START_IN_TRAY=0
-  - --env=SIGNAL_USE_WAYLAND=0
   - --env=SIGNAL_DISABLE_GPU=0
   - --env=SIGNAL_DISABLE_GPU_SANDBOX=0
 
