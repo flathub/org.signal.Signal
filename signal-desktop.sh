@@ -32,8 +32,8 @@ if [[ "${SIGNAL_DISABLE_GPU_SANDBOX}" -eq 1 ]]; then
 fi
 
 
-echo "Debug: Will run signal with the following arguments: ${EXTRA_ARGS[@]}"
-echo "Debug: Additionally, user gave: $@"
+echo "Debug: Will run signal with the following arguments:" "${EXTRA_ARGS[@]}"
+echo "Debug: Additionally, user gave: $*"
 
 export TMPDIR="${XDG_RUNTIME_DIR}/app/${FLATPAK_ID}"
 exec zypak-wrapper /app/Signal/signal-desktop --ozone-platform-hint=auto "${EXTRA_ARGS[@]}" "$@"
