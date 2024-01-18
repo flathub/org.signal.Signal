@@ -31,13 +31,13 @@ finish-args:
   - --talk-name=com.canonical.AppMenu.Registrar
   - --talk-name=com.canonical.indicator.application
   - --talk-name=org.ayatana.indicator.application
-  # Allow advanced input methods
-  - --talk-name=org.freedesktop.portal.Fcitx
+  # Environment Variables to control the behavior
   - --env=SIGNAL_USE_TRAY_ICON=0
   - --env=SIGNAL_START_IN_TRAY=0
   - --env=SIGNAL_USE_WAYLAND=0
   - --env=SIGNAL_DISABLE_GPU=0
   - --env=SIGNAL_DISABLE_GPU_SANDBOX=0
+  # Use same mouse cursors as host
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
 
 modules:
