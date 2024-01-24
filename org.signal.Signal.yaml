@@ -1,8 +1,8 @@
 id: org.signal.Signal
 base: org.electronjs.Electron2.BaseApp
-base-version: "23.08"
+base-version: '23.08'
 runtime: org.freedesktop.Platform
-runtime-version: "23.08"
+runtime-version: '23.08'
 sdk: org.freedesktop.Sdk
 default-branch: beta
 command: signal-desktop-beta
@@ -63,8 +63,8 @@ modules:
     sources:
       - type: file
         dest-filename: signal-desktop-beta.deb
-        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop-beta/signal-desktop-beta_6.45.0-beta.2_amd64.deb
-        sha256: a017a01897c194f616830f724a6e64407d6d986b0376e2a9fbe455f8a3987bd7
+        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop-beta/signal-desktop-beta_6.46.0-beta.1_amd64.deb
+        sha256: a19eb01a4fb8d8795d144e063ba2778bc36b0b412b4bbb9499d12cdf1b900df5
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop-beta
