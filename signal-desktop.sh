@@ -8,7 +8,6 @@ declare -i SIGNAL_DISABLE_GPU_SANDBOX="${SIGNAL_DISABLE_GPU_SANDBOX:-0}"
 
 if [[ "${SIGNAL_USE_WAYLAND}" -eq 1 && "${XDG_SESSION_TYPE}" == "wayland" ]]; then
     EXTRA_ARGS+=(
-        "--enable-features=WaylandWindowDecorations"
         "--ozone-platform=wayland"
     )
 fi
