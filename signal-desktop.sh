@@ -5,6 +5,7 @@ EXTRA_ARGS=()
 declare -i SIGNAL_DISABLE_GPU="${SIGNAL_DISABLE_GPU:-0}"
 declare -i SIGNAL_DISABLE_GPU_SANDBOX="${SIGNAL_DISABLE_GPU_SANDBOX:-0}"
 
+# only kept for backward compatibility
 if (( ${SIGNAL_USE_WAYLAND:-0} )); then
     export ELECTRON_OZONE_PLATFORM_HINT="${ELECTRON_OZONE_PLATFORM_HINT:-auto}"
 fi
