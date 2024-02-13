@@ -19,6 +19,7 @@ if [[ "${SIGNAL_START_IN_TRAY}" -eq 1 ]]; then
     )
 fi
 
+# only kept for backward compatibility
 if (( ${SIGNAL_USE_WAYLAND:-0} )); then
     export ELECTRON_OZONE_PLATFORM_HINT="${ELECTRON_OZONE_PLATFORM_HINT:-auto}"
 fi
