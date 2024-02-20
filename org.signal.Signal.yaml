@@ -43,7 +43,6 @@ modules:
   - name: signal-desktop
     buildsystem: simple
     build-commands:
-    build-commands:
       - |
         bsdtar -Oxf signal-desktop.deb 'data.tar.xz' |
           bsdtar -xf - \
