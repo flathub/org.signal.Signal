@@ -1,8 +1,8 @@
 id: org.signal.Signal
 base: org.electronjs.Electron2.BaseApp
-base-version: "23.08"
+base-version: '23.08'
 runtime: org.freedesktop.Platform
-runtime-version: "23.08"
+runtime-version: '23.08'
 sdk: org.freedesktop.Sdk
 command: signal-desktop
 separate-locales: false
@@ -60,7 +60,7 @@ modules:
         fi
 
         install -Dm0644 "usr/share/applications/signal-desktop${BETA_SUFFIX}.desktop" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
-        
+
         for size in 16 24 32 48 64 128 256 512; do
           install -Dm0644 "usr/share/icons/hicolor/${size}x${size}/apps/signal-desktop${BETA_SUFFIX}.png" "${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/${FLATPAK_ID}.png"
         done
@@ -71,8 +71,8 @@ modules:
     sources:
       - type: file
         dest-filename: signal-desktop.deb
-        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_6.47.1_amd64.deb
-        sha256: 591767dd3d7cc615af9442edc253acfd9a0fb84b7fc9082cec93ffd4c18de4fb
+        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_6.48.0_amd64.deb
+        sha256: 85084c97702b2192bed2ef74b88c3498446ff73e1a2f5367cbd431fc2bec7e5e
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop
