@@ -10,6 +10,7 @@
   <url type="bugtracker">https://github.com/flathub/org.signal.Signal/issues</url>
   <url type="help">https://support.signal.org/</url>
   <url type="donation">https://signal.org/donate/</url>
+  <launchable type="desktop-id">org.signal.Signal.desktop</launchable>
   <description>
     <p>
       To use the Signal desktop app, Signal must first be installed on your phone.
@@ -32,7 +33,8 @@
   </description>
   <screenshots>
     <screenshot type="default">
-      <image type="source">https://signal.org/assets/images/screenshots/download-desktop-windows.png</image>
+      <image type="source">https://web.archive.org/web/20240219132433if_/https://signal.org/assets/images/screenshots/download-desktop-windows.png</image>
+      <caption>Typical view of the window (Windows version)</caption>
     </screenshot>
   </screenshots>
   <releases>
@@ -314,8 +316,5 @@
     <content_attribute id="money-purchasing">none</content_attribute>
     <content_attribute id="money-gambling">none</content_attribute>
   </content_rating>
-  <provides>
-    <id>org.signal.Signal</id>
-  </provides>
   <update_contact>b@bpiotrowski.pl</update_contact>
 </component>

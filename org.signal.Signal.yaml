@@ -6,8 +6,6 @@ runtime-version: '23.08'
 sdk: org.freedesktop.Sdk
 command: signal-desktop
 separate-locales: false
-rename-desktop-file: signal-desktop.desktop
-rename-icon: signal-desktop
 finish-args:
   # X11 performance
   - --share=ipc
@@ -51,13 +49,13 @@ modules:
           bsdtar -xf - \
             --exclude='./usr/share/doc'
       - mv opt/* "${FLATPAK_DEST}"
-      - install -Dm0644 "usr/share/applications/signal-desktop.desktop" "${FLATPAK_DEST}/share/applications/signal-desktop.desktop"
-      - desktop-file-edit --set-key=Exec --set-value='signal-desktop %U' "${FLATPAK_DEST}/share/applications/signal-desktop.desktop"
+      - install -Dm0644 "usr/share/applications/signal-desktop.desktop" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
+      - desktop-file-edit --set-key=Exec --set-value='signal-desktop %U' "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
       - |
         for size in 16 24 32 48 64 128 256 512; do
-          install -Dm0644 "usr/share/icons/hicolor/${size}x${size}/apps/signal-desktop.png" "${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/signal-desktop.png"
+          install -Dm0644 "usr/share/icons/hicolor/${size}x${size}/apps/signal-desktop.png" "${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/${FLATPAK_ID}.png"
         done
-      - desktop-file-edit --set-key=Icon --set-value="signal-desktop" "${FLATPAK_DEST}/share/applications/signal-desktop.desktop"
+      - desktop-file-edit --set-key=Icon --set-value="${FLATPAK_ID}" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
     sources:
       - type: file
         dest-filename: signal-desktop.deb
