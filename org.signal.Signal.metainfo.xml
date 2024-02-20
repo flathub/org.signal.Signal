@@ -11,6 +11,7 @@
   <url type="help">https://support.signal.org/</url>
   <url type="donation">https://signal.org/donate/</url>
   <url type="contribute">https://github.com/signalapp/Signal-Desktop/blob/main/CONTRIBUTING.md</url>
+  <launchable type="desktop-id">org.signal.Signal.desktop</launchable>
   <description>
     <p>
       To use the Signal desktop app, Signal must first be installed on your phone.
@@ -33,7 +34,8 @@
   </description>
   <screenshots>
     <screenshot type="default">
-      <image type="source">https://signal.org/assets/screenshots/download-desktop-windows-cdc181d589c36f2da3ddb9471a981c73bf7e60f6713a90a376ef731f474ab752.png</image>
+      <image type="source">https://web.archive.org/web/20240219132433if_/https://signal.org/assets/images/screenshots/download-desktop-windows.png</image>
+      <caption>Typical view of the window (Windows version)</caption>
     </screenshot>
   </screenshots>
   <releases>
@@ -115,8 +117,5 @@
     <content_attribute id="social-audio">intense</content_attribute>
     <content_attribute id="social-contacts">intense</content_attribute>
   </content_rating>
-  <provides>
-    <id>org.signal.Signal</id>
-  </provides>
   <update_contact>dev@camrod.me</update_contact>
 </component>
