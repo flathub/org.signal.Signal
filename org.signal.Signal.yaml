@@ -53,6 +53,7 @@ modules:
           BETA_SUFFIX=""
         elif [ -d "opt/Signal Beta" ]; then
           mv "opt/Signal Beta" "${FLATPAK_DEST}/Signal"
+          ln -s "${FLATPAK_DEST}/Signal/signal-desktop-beta" "${FLATPAK_DEST}/Signal/signal-desktop"
           BETA_SUFFIX="-beta"
         else
           exit 1
