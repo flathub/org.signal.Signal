@@ -1,14 +1,12 @@
 id: org.signal.Signal
 base: org.electronjs.Electron2.BaseApp
-base-version: '23.08'
+base-version: "23.08"
 runtime: org.freedesktop.Platform
-runtime-version: '23.08'
+runtime-version: "23.08"
 sdk: org.freedesktop.Sdk
 default-branch: beta
-command: signal-desktop-beta
+command: signal-desktop
 separate-locales: false
-rename-desktop-file: signal-desktop-beta.desktop
-rename-icon: signal-desktop-beta
 finish-args:
   # X11 performance
   - --share=ipc
@@ -42,27 +40,37 @@ finish-args:
   # Use same mouse cursors as host
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
 modules:
-  - name: signal-desktop-beta
+  - name: signal-desktop
     buildsystem: simple
     build-commands:
-      - install -Dm0755 signal-desktop-beta.sh "${FLATPAK_DEST}/bin/signal-desktop-beta"
-      - install -Dm0644 "${FLATPAK_ID}.metainfo.xml" "${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml"
       - |
-        bsdtar -Oxf signal-desktop-beta.deb 'data.tar.xz' |
+        bsdtar -Oxf signal-desktop.deb 'data.tar.xz' |
           bsdtar -xf - \
             --exclude='./usr/share/doc'
-      - mv opt/* "${FLATPAK_DEST}"
-      - install -Dm0644 "usr/share/applications/signal-desktop-beta.desktop" "${FLATPAK_DEST}/share/applications/signal-desktop-beta.desktop"
-      - desktop-file-edit --set-key=Exec --set-value='signal-desktop-beta %U' "${FLATPAK_DEST}/share/applications/signal-desktop-beta.desktop"
       - |
+        if [ -d "opt/Signal" ]; then
+          mv "opt/Signal" "${FLATPAK_DEST}/Signal"
+          BETA_SUFFIX=""
+        elif [ -d "opt/Signal Beta" ]; then
+          mv "opt/Signal Beta" "${FLATPAK_DEST}/Signal"
+          ln -s "${FLATPAK_DEST}/Signal/signal-desktop-beta" "${FLATPAK_DEST}/Signal/signal-desktop"
+          BETA_SUFFIX="-beta"
+        else
+          exit 1
+        fi
+
+        install -Dm0644 "usr/share/applications/signal-desktop${BETA_SUFFIX}.desktop" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
+        
         for size in 16 24 32 48 64 128 256 512; do
-          install -Dm0644 "usr/share/icons/hicolor/${size}x${size}/apps/signal-desktop-beta.png" "${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/signal-desktop-beta.png"
+          install -Dm0644 "usr/share/icons/hicolor/${size}x${size}/apps/signal-desktop${BETA_SUFFIX}.png" "${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/${FLATPAK_ID}.png"
         done
-      - desktop-file-edit --set-key=Icon --set-value="signal-desktop-beta" "${FLATPAK_DEST}/share/applications/signal-desktop-beta.desktop"
-      - mv ${FLATPAK_DEST}/Signal\ Beta ${FLATPAK_DEST}/Signal_Beta
+      - install -Dm0755 signal-desktop.sh "${FLATPAK_DEST}/bin/signal-desktop"
+      - install -Dm0644 "${FLATPAK_ID}.metainfo.xml" "${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml"
+      - desktop-file-edit --set-key=Exec --set-value='signal-desktop %U' "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
+      - desktop-file-edit --set-key=Icon --set-value="${FLATPAK_ID}" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
     sources:
       - type: file
-        dest-filename: signal-desktop-beta.deb
+        dest-filename: signal-desktop.deb
         url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop-beta/signal-desktop-beta_6.48.0-beta.2_amd64.deb
         sha256: a226ad281e4702fbac1bceb7b7ffae8da0e347a60b72cd3da0d4ff885d57923e
         x-checker-data:
@@ -74,6 +82,6 @@ modules:
         only-arches:
           - x86_64
       - type: file
-        path: signal-desktop-beta.sh
+        path: signal-desktop.sh
       - type: file
         path: org.signal.Signal.metainfo.xml
