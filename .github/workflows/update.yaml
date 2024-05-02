@@ -9,10 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'flathub'
 
-    # Only update beta branch: master branch is done by external update checker
     strategy:
       matrix:
-        branch: [ beta ]
+        branch: [ master, beta ]
     
     steps:
       - uses: actions/checkout@v3
