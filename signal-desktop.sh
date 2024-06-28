@@ -4,7 +4,6 @@ EXTRA_ARGS=()
 
 declare -i SIGNAL_USE_TRAY_ICON="${SIGNAL_USE_TRAY_ICON:-0}"
 declare -i SIGNAL_START_IN_TRAY="${SIGNAL_START_IN_TRAY:-0}"
-declare -i SIGNAL_USE_WAYLAND="${SIGNAL_USE_WAYLAND:-0}"
 declare -i SIGNAL_DISABLE_GPU="${SIGNAL_DISABLE_GPU:-0}"
 declare -i SIGNAL_DISABLE_GPU_SANDBOX="${SIGNAL_DISABLE_GPU_SANDBOX:-0}"
 
@@ -20,11 +19,9 @@ if [[ "${SIGNAL_START_IN_TRAY}" -eq 1 ]]; then
     )
 fi
 
-if [[ "${SIGNAL_USE_WAYLAND}" -eq 1 && "${XDG_SESSION_TYPE}" == "wayland" ]]; then
-    EXTRA_ARGS+=(
-        "--enable-features=WaylandWindowDecorations"
-        "--ozone-platform=wayland"
-    )
+# only kept for backward compatibility
+if (( ${SIGNAL_USE_WAYLAND:-0} )); then
+    export ELECTRON_OZONE_PLATFORM_HINT="${ELECTRON_OZONE_PLATFORM_HINT:-auto}"
 fi
 
 if [[ "${SIGNAL_DISABLE_GPU}" -eq 1 ]]; then
