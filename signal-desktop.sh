@@ -2,23 +2,9 @@
 
 EXTRA_ARGS=()
 
-declare -i SIGNAL_USE_TRAY_ICON="${SIGNAL_USE_TRAY_ICON:-0}"
-declare -i SIGNAL_START_IN_TRAY="${SIGNAL_START_IN_TRAY:-0}"
 declare -i SIGNAL_USE_WAYLAND="${SIGNAL_USE_WAYLAND:-0}"
 declare -i SIGNAL_DISABLE_GPU="${SIGNAL_DISABLE_GPU:-0}"
 declare -i SIGNAL_DISABLE_GPU_SANDBOX="${SIGNAL_DISABLE_GPU_SANDBOX:-0}"
-
-# Additional args for tray icon
-if [[ "${SIGNAL_USE_TRAY_ICON}" -eq 1 ]]; then
-    EXTRA_ARGS+=(
-        "--use-tray-icon"
-    )
-fi
-if [[ "${SIGNAL_START_IN_TRAY}" -eq 1 ]]; then
-    EXTRA_ARGS+=(
-        "--start-in-tray"
-    )
-fi
 
 if [[ "${SIGNAL_USE_WAYLAND}" -eq 1 && "${XDG_SESSION_TYPE}" == "wayland" ]]; then
     EXTRA_ARGS+=(
