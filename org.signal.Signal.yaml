@@ -1,8 +1,8 @@
 id: org.signal.Signal
 base: org.electronjs.Electron2.BaseApp
-base-version: '23.08'
+base-version: "23.08"
 runtime: org.freedesktop.Platform
-runtime-version: '23.08'
+runtime-version: "23.08"
 sdk: org.freedesktop.Sdk
 default-branch: beta
 command: signal-desktop
@@ -32,8 +32,6 @@ finish-args:
   - --talk-name=com.canonical.indicator.application
   - --talk-name=org.ayatana.indicator.application
   # Environment Variables to control the behavior
-  - --env=SIGNAL_USE_TRAY_ICON=0
-  - --env=SIGNAL_START_IN_TRAY=0
   - --env=SIGNAL_USE_WAYLAND=0
   - --env=SIGNAL_DISABLE_GPU=0
   - --env=SIGNAL_DISABLE_GPU_SANDBOX=0
