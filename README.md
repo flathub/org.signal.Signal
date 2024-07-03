@@ -13,15 +13,15 @@ flatpak install flathub org.signal.Signal
 ```
 
 ## Options
+
 You can set the following environment variables:
 
-* `SIGNAL_USE_TRAY_ICON=1`: Enables the tray icon
-* `SIGNAL_START_IN_TRAY=1`: Starts in tray
-* `SIGNAL_USE_WAYLAND=1`: Enables Wayland support
-* `SIGNAL_DISABLE_GPU=1`: Disables GPU acceleration
-* `SIGNAL_DISABLE_GPU_SANDBOX=1`: Disables GPU sandbox
+- `SIGNAL_USE_WAYLAND=1`: Enables Wayland support
+- `SIGNAL_DISABLE_GPU=1`: Disables GPU acceleration
+- `SIGNAL_DISABLE_GPU_SANDBOX=1`: Disables GPU sandbox
 
 ## Wayland
+
 The integration between Chromium, Electron, and Wayland seems broken.
 Adding an additional layer of complexity like Flatpak can't help.
 For now, using this repo with wayland should be regarded as experimental.

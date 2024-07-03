@@ -25,7 +25,6 @@ if [[ "${SIGNAL_DISABLE_GPU_SANDBOX}" -eq 1 ]]; then
     )
 fi
 
-
 echo "Debug: Will run signal with the following arguments:" "${EXTRA_ARGS[@]}"
 echo "Debug: Additionally, user gave: $*"
 
