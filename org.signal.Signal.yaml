@@ -31,7 +31,6 @@ finish-args:
   - --talk-name=com.canonical.indicator.application
   - --talk-name=org.ayatana.indicator.application
   # Environment Variables to control the behavior
-  - --env=SIGNAL_USE_WAYLAND=0
   - --env=SIGNAL_DISABLE_GPU=0
   - --env=SIGNAL_DISABLE_GPU_SANDBOX=0
   # Use same mouse cursors as host
