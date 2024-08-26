@@ -1,8 +1,8 @@
 id: org.signal.Signal
 base: org.electronjs.Electron2.BaseApp
-base-version: "23.08"
+base-version: '23.08'
 runtime: org.freedesktop.Platform
-runtime-version: "23.08"
+runtime-version: '23.08'
 sdk: org.freedesktop.Sdk
 command: signal-desktop
 separate-locales: false
@@ -68,8 +68,8 @@ modules:
     sources:
       - type: file
         dest-filename: signal-desktop.deb
-        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_7.15.0_amd64.deb
-        sha256: 520595c4b3aaba5fd7b0cfbed426a2efeb248c1c907c60cef200550c936ffedc
+        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_7.21.0_amd64.deb
+        sha256: 9a37f6ec121292f37d5ec8b7e845ed89292f68f11ce23fc2c23961e2091f76c0
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop
