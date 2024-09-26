@@ -10,12 +10,6 @@ if (( ${SIGNAL_USE_WAYLAND:-0} )); then
     export ELECTRON_OZONE_PLATFORM_HINT="${ELECTRON_OZONE_PLATFORM_HINT:-auto}"
 fi
 
-SIGNAL_PASSWORD_STORE="${SIGNAL_PASSWORD_STORE:-basic}"
-
-EXTRA_ARGS+=(
-    "--password-store=${SIGNAL_PASSWORD_STORE}"
-)
-
 if [[ "${SIGNAL_DISABLE_GPU}" -eq 1 ]]; then
     EXTRA_ARGS+=(
         "--disable-gpu"
