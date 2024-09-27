@@ -25,6 +25,12 @@ You can set the following environment variables:
 - `SIGNAL_USE_WAYLAND=1`: Enables Wayland support
 - `SIGNAL_DISABLE_GPU=1`: Disables GPU acceleration
 - `SIGNAL_DISABLE_GPU_SANDBOX=1`: Disables GPU sandbox
+- `SIGNAL_PASSWORD_STORE`: Selects where the database key is stored. Valid options are:
+	- `basic` Writes the key in plaintext to config.json. This is the default.
+	- `gnome_libsecret` for X-Cinnamon, Deepin, GNOME, Pantheon, XFCE, UKUI, unity
+	- `kwallet` for kde4
+	- `kwallet5` for kde5
+	- `kwallet6` for kde6
 
 ## Wayland
 
