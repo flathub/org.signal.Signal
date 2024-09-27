@@ -41,15 +41,15 @@ finish-args:
   # Use same mouse cursors as host
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
 modules:
-  - name: signal-desktop
+  - name: signal-desktop-beta
     buildsystem: simple
     build-commands:
       - |
-        bsdtar -Oxf signal-desktop.deb 'data.tar.xz' |
+        bsdtar -Oxf signal-desktop-beta.deb 'data.tar.xz' |
           bsdtar -xf - \
             --exclude='./usr/share/doc'
       - |
-        mv "opt/Signal Beta" "${FLATPAK_DEST}/Signal Beta"
+        mv "opt/Signal Beta" "${FLATPAK_DEST}/Signal"
 
         install -Dm0644 "usr/share/applications/signal-desktop-beta.desktop" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
 
@@ -61,10 +61,10 @@ modules:
       - desktop-file-edit --set-key=Exec --set-value='signal-desktop-beta %U' "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
       - desktop-file-edit --set-key=Icon --set-value="${FLATPAK_ID}" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
       - desktop-file-edit --set-key=X-Flatpak-RenamedFrom --set-value='signal-desktop-beta.desktop;' "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
-      - patch-desktop-filename "${FLATPAK_DEST}/Signal Beta/resources/app.asar"
+      - patch-desktop-filename "${FLATPAK_DEST}/Signal/resources/app.asar"
     sources:
       - type: file
-        dest-filename: signal-desktop.deb
+        dest-filename: signal-desktop-beta.deb
         url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop-beta/signal-desktop-beta_7.27.0-beta.1_amd64.deb
         sha256: 89c0021a5ecd2205621fc4d257704356b0e61d964b336ec3a81b4f836164efa5
         x-checker-data:
