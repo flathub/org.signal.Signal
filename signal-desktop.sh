@@ -1,6 +1,6 @@
 #!/bin/bash
 
-report_warning() {
+show_encryption_warning() {
     read -r -d '|' MESSAGE <<EOF
 Signal is being launched with the <b>plaintext password store</b> by
 default due to database corruption bugs when using the encrypted backends.
@@ -8,7 +8,7 @@ This will leave your keys <b>unencrypted</b> on disk as it did in all previous v
 
 If you wish to experiment with the encrypted backend, set the environment variable
 <tt>SIGNAL_PASSWORD_STORE</tt> to <tt>gnome_libsecret</tt>, <tt>kwallet</tt>,
-<tt>kwallet5 or <tt>kwallet6</tt> depending on your desktop environment using
+<tt>kwallet5</tt> or <tt>kwallet6</tt> depending on your desktop environment using
 Flatseal or the following command:
 
 <tt>flatpak override --env=SIGNAL_PASSWORD_STORE=gnome-libsecret org.signal.Signal</tt>
@@ -54,10 +54,8 @@ case "${SIGNAL_PASSWORD_STORE}" in
 esac
 
 if [[ "${SIGNAL_PASSWORD_STORE}" == "basic" ]]; then
-    if [[ -f "${XDG_CACHE_HOME}"/warning-shown ]]; then
-        rm "${XDG_CACHE_HOME}"/warning-shown || true
-    else
-        report_warning
+    if [[ ! -f "${XDG_CACHE_HOME}"/warning-shown ]]; then
+        show_encryption_warning
     fi
 fi
 
