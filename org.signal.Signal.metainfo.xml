@@ -38,6 +38,9 @@
       <caption>Typical view of the window (Windows version)</caption>
     </screenshot>
   </screenshots>
+  <provides>
+    <id>signal.desktop</id>
+  </provides>
   <releases>
     <release version="7.24.1" date="2024-09-12">
       <description></description>
