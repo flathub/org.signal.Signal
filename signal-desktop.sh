@@ -53,8 +53,11 @@ case "${SIGNAL_PASSWORD_STORE}" in
         ;;
 esac
 
+# Warn the user about plaintext password
+# - if the user chose basic (this is the default)
+# - and Signal starts for the first time
 if [[ "${SIGNAL_PASSWORD_STORE}" == "basic" ]]; then
-    if [[ ! -f "${XDG_CACHE_HOME}"/warning-shown ]]; then
+    if [[ ! -f "${XDG_CONFIG_HOME}/Signal/config.json" ]]; then
         show_encryption_warning
     fi
 fi
