@@ -4,13 +4,16 @@ report_warning() {
     read -r -d '|' MESSAGE <<EOF
 Signal is being launched with the <b>plaintext password store</b> by
 default due to database corruption bugs when using the encrypted backends.
-This will leave your keys <b>unencrypted</b> on disk.
+This will leave your keys <b>unencrypted</b> on disk as it did in all previous versions.
 
-If you wish to experiment with the encrypted backend at the risk of
-database corruption, set the environment variable
-<tt>SIGNAL_PASSWORD_STORE</tt> to gnome_libsecret, kwallet,
-kwallet5 or kwallet6 depending on your desktop environment using
-Flatseal.
+If you wish to experiment with the encrypted backend, set the environment variable
+<tt>SIGNAL_PASSWORD_STORE</tt> to <tt>gnome_libsecret</tt>, <tt>kwallet</tt>,
+<tt>kwallet5 or <tt>kwallet6</tt> depending on your desktop environment using
+Flatseal or the following command:
+
+<tt>flatpak override --env=SIGNAL_PASSWORD_STORE=gnome-libsecret org.signal.Signal</tt>
+
+Note that the encrypted backends are <b>experimental</b> and may cause data loss on some systems.
 
 Press <b>Yes</b> to proceed with <b>plaintext password store</b> or
 <b>No</b> to <b>exit</b>. |
@@ -51,8 +54,11 @@ case "${SIGNAL_PASSWORD_STORE}" in
 esac
 
 if [[ "${SIGNAL_PASSWORD_STORE}" == "basic" ]]; then
-    echo "Info: Using basic password store. The encryption key to the datbase will be stored unencrypted."
-    echo "Info: If you see a database opening error, you should change the environent variable SIGNAL_PASSWORD_STORE to one of the following: gnome-libsecret, kwallet, kwallet5, or kwallet6"
+    if [[ -f "${XDG_CACHE_HOME}"/warning-shown ]]; then
+        rm "${XDG_CACHE_HOME}"/warning-shown || true
+    else
+        report_warning
+    fi
 fi
 
 if [[ "${SIGNAL_DISABLE_GPU}" -eq 1 ]]; then
@@ -71,19 +77,4 @@ echo "Debug: Will run signal with the following arguments:" "${EXTRA_ARGS[@]}"
 echo "Debug: Additionally, user gave: $*"
 
 export TMPDIR="${XDG_RUNTIME_DIR}/app/${FLATPAK_ID}"
-
-found_basic_pw_store=false
-for value in "${EXTRA_ARGS[@]}"; do
-    if [[ "--password-store=basic" = "$value" ]]; then
-        found_basic_pw_store=true
-        break
-    fi
-done
-
-if "$found_basic_pw_store" && [[ ! -f "${XDG_CACHE_HOME}"/warning-shown ]]; then
-    report_warning
-elif ! "$found_basic_pw_store"; then
-    rm "${XDG_CACHE_HOME}"/warning-shown || true
-fi
-
 exec zypak-wrapper "/app/Signal/signal-desktop" "${EXTRA_ARGS[@]}" "$@"
