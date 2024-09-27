@@ -8,15 +8,11 @@ jobs:
   flatpak-external-data-checker:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'flathub'
-
-    strategy:
-      matrix:
-        branch: [ master, beta ]
     
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ matrix.branch }}
+          ref: master
 
       - uses: docker://ghcr.io/flathub/flatpak-external-data-checker:latest
         env:
