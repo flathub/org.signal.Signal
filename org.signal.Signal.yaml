@@ -67,13 +67,14 @@ modules:
       - install -Dm0644 "${FLATPAK_ID}.metainfo.xml" "${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml"
       - desktop-file-edit --set-key=Exec --set-value='signal-desktop %U' "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
       - desktop-file-edit --set-key=Icon --set-value="${FLATPAK_ID}" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
-      - desktop-file-edit --set-key=X-Flatpak-RenamedFrom --set-value='signal.desktop;' "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
+      - desktop-file-edit --set-key=X-Flatpak-RenamedFrom --set-value='signal.desktop;'
+        "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
       - patch-desktop-filename "${FLATPAK_DEST}/Signal/resources/app.asar"
     sources:
       - type: file
         dest-filename: signal-desktop.deb
-        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_7.24.1_amd64.deb
-        sha256: 104464ca98fdd86a757154a8757c73894dda5ac18360f0fcdc1da7746d66411d
+        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_7.26.0_amd64.deb
+        sha256: 14ef6d9125b8deac77cf373ea94a42965b07c482889c4de0bb584c8172bbb314
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop
