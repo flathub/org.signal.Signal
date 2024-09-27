@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
   <id>org.signal.Signal</id>
-  <name>Signal Desktop</name>
+  <name>Signal Beta</name>
   <project_license>AGPL-3.0-only</project_license>
   <developer_name>Signal Foundation</developer_name>
   <summary>Private messenger</summary>
@@ -39,7 +39,7 @@
     </screenshot>
   </screenshots>
   <provides>
-    <id>signal.desktop</id>
+    <id>signal-desktop-beta.desktop</id>
   </provides>
   <releases>
     <release version="7.27.0~beta.1" date="2024-09-26">
