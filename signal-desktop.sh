@@ -23,8 +23,6 @@ EOF
     if [ "$?" -eq "1" ]; then
         echo "Debug: Abort as user pressed no"
         exit 1
-    else
-        touch "${XDG_CACHE_HOME}"/warning-shown
     fi
 }
 
