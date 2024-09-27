@@ -7,7 +7,7 @@ default due to database corruption bugs when using the encrypted backends.
 This will leave your keys <b>unencrypted</b> on disk as it did in all previous versions.
 
 If you wish to experiment with the encrypted backend, set the environment variable
-<tt>SIGNAL_PASSWORD_STORE</tt> to <tt>gnome_libsecret</tt>, <tt>kwallet</tt>,
+<tt>SIGNAL_PASSWORD_STORE</tt> to <tt>gnome-libsecret</tt>, <tt>kwallet</tt>,
 <tt>kwallet5</tt> or <tt>kwallet6</tt> depending on your desktop environment using
 Flatseal or the following command:
 
@@ -23,8 +23,6 @@ EOF
     if [ "$?" -eq "1" ]; then
         echo "Debug: Abort as user pressed no"
         exit 1
-    else
-        touch "${XDG_CACHE_HOME}"/warning-shown
     fi
 }
 
@@ -54,8 +52,11 @@ case "${SIGNAL_PASSWORD_STORE}" in
         ;;
 esac
 
+# Warn the user about plaintext password
+# - if the user chose basic (this is the default)
+# - and Signal starts for the first time
 if [[ "${SIGNAL_PASSWORD_STORE}" == "basic" ]]; then
-    if [[ ! -f "${XDG_CACHE_HOME}"/warning-shown ]]; then
+    if [[ ! -f "${XDG_CONFIG_HOME}/Signal/config.json" ]]; then
         show_encryption_warning
     fi
 fi

@@ -27,7 +27,7 @@ You can set the following environment variables:
 - `SIGNAL_DISABLE_GPU_SANDBOX=1`: Disables GPU sandbox
 - `SIGNAL_PASSWORD_STORE`: Selects where the database key is stored. Valid options are:
 	- `basic` Writes the key in plaintext to config.json. This is the default.
-	- `gnome_libsecret` for X-Cinnamon, Deepin, GNOME, Pantheon, XFCE, UKUI, unity
+	- `gnome-libsecret` for X-Cinnamon, Deepin, GNOME, Pantheon, XFCE, UKUI, unity
 	- `kwallet` for kde4
 	- `kwallet5` for kde5
 	- `kwallet6` for kde6
