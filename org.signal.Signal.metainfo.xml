@@ -42,8 +42,11 @@
     <id>signal.desktop</id>
   </provides>
   <releases>
-    <release version="7.24.1" date="2024-09-12">
+    <release version="7.27.0" date="2024-10-03">
       <description></description>
+    </release>
+    <release version="7.24.1" date="2024-09-12">
+      <description/>
     </release>
     <release version="7.24.0" date="2024-09-12">
       <description/>
