@@ -39,7 +39,7 @@
     </screenshot>
   </screenshots>
   <provides>
-    <id>signal.desktop</id>
+    <id>signal-desktop.desktop</id>
   </provides>
   <releases>
     <release version="7.27.0" date="2024-10-03">
