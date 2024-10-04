@@ -55,7 +55,7 @@ esac
 # - if the user chose basic (this is the default)
 # - and Signal starts for the first time
 if [[ "${SIGNAL_PASSWORD_STORE}" == "basic" ]]; then
-    if [[ ! -f "${XDG_CONFIG_HOME}/Signal/config.json" ]]; then
+    if [[ ! -f "${XDG_CONFIG_HOME}/Signal Beta/config.json" ]]; then
         show_encryption_warning
     fi
 fi
@@ -76,4 +76,5 @@ echo "Debug: Will run signal with the following arguments:" "${EXTRA_ARGS[@]}"
 echo "Debug: Additionally, user gave: $*"
 
 export TMPDIR="${XDG_RUNTIME_DIR}/app/${FLATPAK_ID}"
-exec zypak-wrapper "/app/Signal/signal-desktop" "${EXTRA_ARGS[@]}" "$@"
+# We can't export to "/app/Signal Beta" because chromium trips over the whitespace
+exec zypak-wrapper "/app/Signal/signal-desktop-beta" "${EXTRA_ARGS[@]}" "$@"

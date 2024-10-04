@@ -1,4 +1,4 @@
-name: Check for beta updates
+name: Check for updates
 on:
   schedule:
     - cron: "0 * * * *"
