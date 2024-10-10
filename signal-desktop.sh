@@ -36,6 +36,13 @@ if ((${SIGNAL_USE_WAYLAND:-0})); then
     export ELECTRON_OZONE_PLATFORM_HINT="${ELECTRON_OZONE_PLATFORM_HINT:-auto}"
 fi
 
+# Warn the user about plaintext password
+# - if the user chose basic (this is the default)
+# - and Signal starts for the first time
+if [[ -z "${SIGNAL_PASSWORD_STORE-}" && ! -f "${XDG_CONFIG_HOME}/Signal/config.json" ]]; then
+    show_encryption_warning
+fi
+
 declare -r SIGNAL_PASSWORD_STORE="${SIGNAL_PASSWORD_STORE:-basic}"
 
 case "${SIGNAL_PASSWORD_STORE}" in
@@ -50,15 +57,6 @@ case "${SIGNAL_PASSWORD_STORE}" in
         exit 1
         ;;
 esac
-
-# Warn the user about plaintext password
-# - if the user chose basic (this is the default)
-# - and Signal starts for the first time
-if [[ "${SIGNAL_PASSWORD_STORE}" == "basic" ]]; then
-    if [[ ! -f "${XDG_CONFIG_HOME}/Signal/config.json" ]]; then
-        show_encryption_warning
-    fi
-fi
 
 if [[ "${SIGNAL_DISABLE_GPU}" -eq 1 ]]; then
     EXTRA_ARGS+=(
