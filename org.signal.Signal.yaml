@@ -1,8 +1,8 @@
 id: org.signal.Signal
 base: org.electronjs.Electron2.BaseApp
-base-version: '23.08'
+base-version: '24.08'
 runtime: org.freedesktop.Platform
-runtime-version: '23.08'
+runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 command: signal-desktop
 separate-locales: false
@@ -24,6 +24,8 @@ finish-args:
   - --talk-name=org.gnome.SessionManager
   - --talk-name=org.freedesktop.PowerManagement
   - --talk-name=org.freedesktop.ScreenSaver
+  # Secrets storage
+  - --talk-name=org.freedesktop.secrets
   # These are for notifications/tray icons
   - --talk-name=org.gnome.Mutter.IdleMonitor
   - --talk-name=org.kde.StatusNotifierWatcher
@@ -33,6 +35,7 @@ finish-args:
   # Environment Variables to control the behavior
   - --env=SIGNAL_DISABLE_GPU=0
   - --env=SIGNAL_DISABLE_GPU_SANDBOX=0
+  - --env=SIGNAL_PASSWORD_STORE=basic
   # Use same mouse cursors as host
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
 
@@ -44,32 +47,24 @@ modules:
         bsdtar -Oxf signal-desktop.deb 'data.tar.xz' |
           bsdtar -xf - \
             --exclude='./usr/share/doc'
+      - mv "opt/Signal" "${FLATPAK_DEST}/Signal"
+      - install -Dm0644 "usr/share/applications/signal-desktop.desktop" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
+
       - |
-        if [ -d "opt/Signal" ]; then
-          mv "opt/Signal" "${FLATPAK_DEST}/Signal"
-          BETA_SUFFIX=""
-        elif [ -d "opt/Signal Beta" ]; then
-          mv "opt/Signal Beta" "${FLATPAK_DEST}/Signal"
-          ln -s "${FLATPAK_DEST}/Signal/signal-desktop-beta" "${FLATPAK_DEST}/Signal/signal-desktop"
-          BETA_SUFFIX="-beta"
-        else
-          exit 1
-        fi
-
-        install -Dm0644 "usr/share/applications/signal-desktop${BETA_SUFFIX}.desktop" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
-
         for size in 16 24 32 48 64 128 256 512; do
-          install -Dm0644 "usr/share/icons/hicolor/${size}x${size}/apps/signal-desktop${BETA_SUFFIX}.png" "${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/${FLATPAK_ID}.png"
+          install -Dm0644 "usr/share/icons/hicolor/${size}x${size}/apps/signal-desktop.png" "${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/${FLATPAK_ID}.png"
         done
       - install -Dm0755 signal-desktop.sh "${FLATPAK_DEST}/bin/signal-desktop"
       - install -Dm0644 "${FLATPAK_ID}.metainfo.xml" "${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml"
       - desktop-file-edit --set-key=Exec --set-value='signal-desktop %U' "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
       - desktop-file-edit --set-key=Icon --set-value="${FLATPAK_ID}" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
+      - desktop-file-edit --set-key=X-Flatpak-RenamedFrom --set-value='signal-desktop.desktop;' "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
+      - patch-desktop-filename "${FLATPAK_DEST}/Signal/resources/app.asar"
     sources:
       - type: file
         dest-filename: signal-desktop.deb
-        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_7.21.0_amd64.deb
-        sha256: 9a37f6ec121292f37d5ec8b7e845ed89292f68f11ce23fc2c23961e2091f76c0
+        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_7.24.1_amd64.deb
+        sha256: 104464ca98fdd86a757154a8757c73894dda5ac18360f0fcdc1da7746d66411d
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop
