@@ -26,28 +26,21 @@ EOF
     fi
 }
 
-explain_filesystem_access() {
+user_accepted_filesystem_access() {
     read -r -d '|' MESSAGE <<EOF
-Signal is being launched with the <b>filesystem=host</b> option to allow access to the host filesystem.
+By default, Signal is being launched with the <b>filesystem=host</b> option to allow access to the host filesystem.
 This is currently required because Electron decided to break the portals (temporarily):
-<a href="https://github.com/flathub/org.signal.Signal/issues/719">flathub/org.signal.Signal#719</a>
-and
-<a href="https://github.com/electron/electron/issues/43819#issuecomment-2383104130">electron/electron#43819</a>
+See <a href="https://github.com/flathub/org.signal.Signal/issues/719">flathub/org.signal.Signal#719</a> and <a href="https://github.com/electron/electron/issues/43819#issuecomment-2383104130">electron/electron#43819</a>
 
-If you disagree with host system access, please use Flatseal (or the commandline) to restrict the permissions
-to the only the directories you want Signal to access for reading and writing files.
+If you disagree with host filesystem access, please use Flatseal (or the commandline) to restrict the permissions
+to the only those directories you want Signal to be able access for reading and writing files.
 
 Press <b>Yes</b> to proceed with <b>filesystem=host</b> or <b>No</b> to <b>exit</b>.
 
-This information is shown only once. If you press <b>No</b>, Signal will exit.
-The next time you start Signal, you will not see this message and <b>filesystem=host</b> will be used.
+If you manually changed the permissions with Flatseal already, you can press <b>Yes</b> to continue.
 EOF
-    if [[ ! "$(zenity --question --no-wrap --icon-name=info --title "Information about full file system access" --text "${MESSAGE}")" ]]; then
-        echo "Debug: Abort as user pressed cancel"
-        return 1
-    fi
-
-    return 0
+    zenity --question --no-wrap --icon-name=info --title "Information about full file system access" --text "${MESSAGE}"
+    return $?
 }
 
 EXTRA_ARGS=()
@@ -85,14 +78,13 @@ if [[ "${SIGNAL_PASSWORD_STORE}" == "basic" ]]; then
 fi
 
 # Explain filesystem=host upon the first run
-EXPLAIN_FILESYSTEM_HOST_FILE="${XDG_CACHE_HOME}/signal-explanation-filesystem-access-shown"
+EXPLAIN_FILESYSTEM_HOST_FILE="${XDG_CACHE_HOME}/signal-user-accepted-filesystem-access"
 if [[ ! -f "${EXPLAIN_FILESYSTEM_HOST_FILE}" ]]; then
-    acceptAccess="$(explain_filesystem_access)"
-    touch "${EXPLAIN_FILESYSTEM_HOST_FILE}"
-    if [[ "${acceptAccess}" == "0" ]]; then
-        echo "Debug: User accepted filesystem=host explanation"
+    if user_accepted_filesystem_access; then
+        echo "Debug: User accepted filesystem=host explanation or already changed permissions."
+        touch "${EXPLAIN_FILESYSTEM_HOST_FILE}"
     else
-        echo "Debug: Abort as user pressed cancel on filesystem=host explanation"
+        echo "Debug: Abort as user pressed cancel on filesystem=host explanation."
         exit 1
     fi
 fi
