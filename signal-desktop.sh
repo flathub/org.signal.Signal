@@ -85,7 +85,7 @@ if [[ "${SIGNAL_PASSWORD_STORE}" == "basic" ]]; then
 fi
 
 # Explain filesystem=host upon the first run
-EXPLAIN_FILESYSTEM_HOST_FILE="${XDG_CONFIG_HOME}/Signal/explanation-filesystem-access-shown"
+EXPLAIN_FILESYSTEM_HOST_FILE="${XDG_CACHE_HOME}/signal-explanation-filesystem-access-shown"
 if [[ ! -f "${EXPLAIN_FILESYSTEM_HOST_FILE}" ]]; then
     acceptAccess="$(explain_filesystem_access)"
     touch "${EXPLAIN_FILESYSTEM_HOST_FILE}"
