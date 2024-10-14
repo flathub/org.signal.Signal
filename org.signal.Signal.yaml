@@ -60,13 +60,14 @@ modules:
       - install -Dm0644 "${FLATPAK_ID}.metainfo.xml" "${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml"
       - desktop-file-edit --set-key=Exec --set-value='signal-desktop-beta %U' "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
       - desktop-file-edit --set-key=Icon --set-value="${FLATPAK_ID}" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
-      - desktop-file-edit --set-key=X-Flatpak-RenamedFrom --set-value='signal-desktop-beta.desktop;' "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
+      - desktop-file-edit --set-key=X-Flatpak-RenamedFrom --set-value='signal-desktop-beta.desktop;'
+        "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
       - patch-desktop-filename "${FLATPAK_DEST}/Signal/resources/app.asar"
     sources:
       - type: file
         dest-filename: signal-desktop-beta.deb
-        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop-beta/signal-desktop-beta_7.28.0-beta.1_amd64.deb
-        sha256: f5dfd9ee210abdefac06427b286563006a07077793c5cbab382325146a34b7fe
+        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop-beta/signal-desktop-beta_7.29.0-beta.1_amd64.deb
+        sha256: 6499c2cb4eaf57e11ea9d1de87ee76057de814e73b100740c9cac5936cda1a49
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop-beta
