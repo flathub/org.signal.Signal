@@ -72,7 +72,7 @@ esac
 # - if the user chose basic (this is the default)
 # - and Signal starts for the first time
 if [[ "${SIGNAL_PASSWORD_STORE}" == "basic" ]]; then
-    if [[ ! -f "${XDG_CONFIG_HOME}/Signal/config.json" ]]; then
+    if [[ ! -f "${XDG_CONFIG_HOME}/Signal Beta/config.json" ]]; then
         show_encryption_warning
     fi
 fi
