@@ -56,16 +56,16 @@ fi
 declare -r SIGNAL_PASSWORD_STORE="${SIGNAL_PASSWORD_STORE:-basic}"
 
 case "${SIGNAL_PASSWORD_STORE}" in
-    basic | gnome-libsecret | kwallet | kwallet5 | kwallet6)
-        echo "Debug: Using password store: ${SIGNAL_PASSWORD_STORE}"
-        EXTRA_ARGS=(
-            "--password-store=${SIGNAL_PASSWORD_STORE}"
-        )
-        ;;
-    *)
-        echo "Error: SIGNAL_PASSWORD_STORE (${SIGNAL_PASSWORD_STORE}) must be one of the following: basic, gnome-libsecret, kwallet, kwallet5, kwallet6"
-        exit 1
-        ;;
+basic | gnome-libsecret | kwallet | kwallet5 | kwallet6)
+    echo "Debug: Using password store: ${SIGNAL_PASSWORD_STORE}"
+    EXTRA_ARGS=(
+        "--password-store=${SIGNAL_PASSWORD_STORE}"
+    )
+    ;;
+*)
+    echo "Error: SIGNAL_PASSWORD_STORE (${SIGNAL_PASSWORD_STORE}) must be one of the following: basic, gnome-libsecret, kwallet, kwallet5, kwallet6"
+    exit 1
+    ;;
 esac
 
 # Warn the user about plaintext password

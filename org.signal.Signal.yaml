@@ -16,6 +16,8 @@ finish-args:
   - --socket=wayland
   # Audio Access
   - --socket=pulseaudio
+  # Access to all files
+  - --filesystem=host
   # All devices (camera, microphone for calls)
   - --device=all
   # Network Access
