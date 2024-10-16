@@ -16,7 +16,7 @@ finish-args:
   # Audio Access
   - --socket=pulseaudio
   # Access to all files
-  - --filesystem=host
+  - --filesystem=xdg-public-share
   # All devices (camera, microphone for calls)
   - --device=all
   # Network Access
