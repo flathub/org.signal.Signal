@@ -68,6 +68,10 @@ basic | gnome-libsecret | kwallet | kwallet5 | kwallet6)
     ;;
 esac
 
+if [[ "${ELECTRON_OZONE_PLATFORM_HINT}" == "auto" || "${ELECTRON_OZONE_PLATFORM_HINT}" == "wayland" ]]; then
+    EXTRA_ARGS+=("--enable-wayland-ime" "--wayland-text-input-version=3")
+fi
+
 # Warn the user about plaintext password
 # - if the user chose basic (this is the default)
 # - and Signal starts for the first time
