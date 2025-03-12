@@ -60,6 +60,10 @@ modules:
       - type: archive
         url: https://download.gnome.org/sources/libsecret/0.21/libsecret-0.21.6.tar.xz
         sha256: 747b8c175be108c880d3adfb9c3537ea66e520e4ad2dccf5dce58003aeeca090
+        x-checker-data:
+          type: anitya
+          project-id: 13150
+          url-template: https://download.gnome.org/sources/libsecret/$major.$minor/libsecret-$version.tar.xz
 
   - name: signal-desktop-beta
     buildsystem: simple
