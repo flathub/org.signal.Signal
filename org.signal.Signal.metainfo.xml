@@ -11,6 +11,7 @@
   <url type="help">https://support.signal.org/</url>
   <url type="donation">https://signal.org/donate/</url>
   <url type="contribute">https://github.com/signalapp/Signal-Desktop/blob/main/CONTRIBUTING.md</url>
+  <url type="vcs-browser">https://github.com/signalapp/Signal-Desktop</url>
   <launchable type="desktop-id">org.signal.Signal.desktop</launchable>
   <description>
     <p>
