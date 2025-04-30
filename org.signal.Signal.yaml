@@ -32,6 +32,9 @@ finish-args:
   - --talk-name=com.canonical.AppMenu.Registrar
   - --talk-name=com.canonical.indicator.application
   - --talk-name=org.ayatana.indicator.application
+  # This is needed for the notification count badge in DEs that implement
+  # the Untiy protocol for this functionality (e.g. KDE)
+  - --talk-name=com.canonical.Unity
   # Environment Variables to control the behavior
   - --env=SIGNAL_DISABLE_GPU=0
   - --env=SIGNAL_DISABLE_GPU_SANDBOX=0
