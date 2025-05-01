@@ -28,11 +28,12 @@ finish-args:
   # Secrets storage
   - --talk-name=org.freedesktop.secrets
   # These are for notifications/tray icons
-  - --talk-name=org.gnome.Mutter.IdleMonitor
-  - --talk-name=org.kde.StatusNotifierWatcher
   - --talk-name=com.canonical.AppMenu.Registrar
+  - --talk-name=com.canonical.Unity
   - --talk-name=com.canonical.indicator.application
   - --talk-name=org.ayatana.indicator.application
+  - --talk-name=org.gnome.Mutter.IdleMonitor
+  - --talk-name=org.kde.StatusNotifierWatcher
   # Environment Variables to control the behavior
   - --env=SIGNAL_USE_WAYLAND=0
   - --env=SIGNAL_DISABLE_GPU=0
