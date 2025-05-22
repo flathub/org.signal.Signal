@@ -43,8 +43,11 @@
     <id>signal-desktop-beta.desktop</id>
   </provides>
   <releases>
-    <release version="7.56.0~beta.1" date="2025-05-21">
+    <release version="7.56.0~beta.2" date="2025-05-22">
       <description></description>
+    </release>
+    <release version="7.56.0~beta.1" date="2025-05-21">
+      <description/>
     </release>
     <release version="7.55.0~beta.2" date="2025-05-15">
       <description/>
