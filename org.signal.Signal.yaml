@@ -39,6 +39,8 @@ finish-args:
   - --env=SIGNAL_DISABLE_GPU=0
   - --env=SIGNAL_DISABLE_GPU_SANDBOX=0
   - --env=SIGNAL_PASSWORD_STORE=basic
+  # Environment variable set to make Signal prefer Wayland when available
+  - --env=ELECTRON_OZONE_PLATFORM_HINT=auto
   # Use same mouse cursors as host
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
 
