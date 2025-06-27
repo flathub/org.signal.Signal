@@ -10,7 +10,7 @@ finish-args:
   # X11 performance
   - --share=ipc
   # We need X11
-  - --socket=x11
+  - --socket=fallback-x11
   # Access to wayland
   - --socket=wayland
   # Audio Access
