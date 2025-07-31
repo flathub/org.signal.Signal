@@ -91,8 +91,8 @@ modules:
     sources:
       - type: file
         dest-filename: signal-desktop-beta.deb
-        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop-beta/signal-desktop-beta_7.64.0-beta.1_amd64.deb
-        sha256: c9831e56c14d528edd5d359fc5c76bf49b5ca5408c8650a4922063decc14ce4d
+        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop-beta/signal-desktop-beta_7.65.0-beta.1_amd64.deb
+        sha256: 2813fe48f27a7772f164b006fbd4cea7610e4a510f172ba5885ac1590ba1f276
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop-beta
