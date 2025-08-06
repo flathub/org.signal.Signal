@@ -43,8 +43,11 @@
     <id>signal-desktop.desktop</id>
   </provides>
   <releases>
-    <release version="7.64.0" date="2025-07-31">
+    <release version="7.65.0" date="2025-08-06">
       <description></description>
+    </release>
+    <release version="7.64.0" date="2025-07-31">
+      <description/>
     </release>
     <release version="7.63.0" date="2025-07-22">
       <description/>
