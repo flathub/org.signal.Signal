@@ -16,7 +16,6 @@ flatpak install flathub org.signal.Signal
 
 You can set the following environment variables:
 
-- `ELECTRON_OZONE_PLATFORM_HINT=auto`: Enables Wayland support
 - `SIGNAL_DISABLE_GPU=1`: Disables GPU acceleration
 - `SIGNAL_DISABLE_GPU_SANDBOX=1`: Disables GPU sandbox
 - `SIGNAL_PASSWORD_STORE`: Selects where the database key is stored. Valid options are:
@@ -26,19 +25,7 @@ You can set the following environment variables:
 	- `kwallet5` for kde5
 	- `kwallet6` for kde6
 
-## Wayland
-
-The integration between Chromium, Electron, and Wayland seems broken.
-Adding an additional layer of complexity like Flatpak can't help.
-For now, using this repo with wayland should be regarded as experimental.
-
-Wayland support can be enabled with `ELECTRON_OZONE_PLATFORM_HINT=auto` in [Flatseal](https://flathub.org/apps/details/com.github.tchx84.Flatseal).
-
-Wayland support can also be enabled on the command line:
-
-```bash
-flatpak override --user --env=ELECTRON_OZONE_PLATFORM_HINT=auto org.signal.Signal
-```
+## Troubleshooting
 
 GPU acceleration may be need to be disabled:
 
