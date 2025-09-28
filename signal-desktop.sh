@@ -31,11 +31,6 @@ EXTRA_ARGS=()
 declare -i SIGNAL_DISABLE_GPU="${SIGNAL_DISABLE_GPU:-0}"
 declare -i SIGNAL_DISABLE_GPU_SANDBOX="${SIGNAL_DISABLE_GPU_SANDBOX:-0}"
 
-# only kept for backward compatibility
-if ((${SIGNAL_USE_WAYLAND:-0})); then
-    export ELECTRON_OZONE_PLATFORM_HINT="${ELECTRON_OZONE_PLATFORM_HINT:-auto}"
-fi
-
 declare -r SIGNAL_PASSWORD_STORE="${SIGNAL_PASSWORD_STORE:-basic}"
 
 case "${SIGNAL_PASSWORD_STORE}" in
@@ -51,8 +46,14 @@ basic | gnome-libsecret | kwallet | kwallet5 | kwallet6)
     ;;
 esac
 
-if [[ "${ELECTRON_OZONE_PLATFORM_HINT}" == "auto" || "${ELECTRON_OZONE_PLATFORM_HINT}" == "wayland" ]]; then
+# add wayland specific command line arguments
+if [[ ${XDG_SESSION_TYPE:-} == "wayland" ]]; then
     EXTRA_ARGS+=("--enable-wayland-ime" "--wayland-text-input-version=3")
+
+    # work around electron's broken wayland detection
+    # TODO: remove when signal uses an electron release that includes the fix
+    # https://github.com/electron/electron/pull/48301
+    EXTRA_ARGS+=("--ozone-platform=wayland")
 fi
 
 # Warn the user about plaintext password

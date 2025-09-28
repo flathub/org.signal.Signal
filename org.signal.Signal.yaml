@@ -32,6 +32,9 @@ finish-args:
   - --talk-name=com.canonical.AppMenu.Registrar
   - --talk-name=com.canonical.indicator.application
   - --talk-name=org.ayatana.indicator.application
+  # This is needed for the notification count badge in DEs that implement
+  # the Untiy protocol for this functionality (e.g. KDE)
+  - --talk-name=com.canonical.Unity
   # Environment Variables to control the behavior
   - --env=SIGNAL_DISABLE_GPU=0
   - --env=SIGNAL_DISABLE_GPU_SANDBOX=0
@@ -56,8 +59,12 @@ modules:
       - /share/man
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/libsecret/0.21/libsecret-0.21.6.tar.xz
-        sha256: 747b8c175be108c880d3adfb9c3537ea66e520e4ad2dccf5dce58003aeeca090
+        url: https://download.gnome.org/sources/libsecret/0.21/libsecret-0.21.7.tar.xz
+        sha256: 6b452e4750590a2b5617adc40026f28d2f4903de15f1250e1d1c40bfd68ed55e
+        x-checker-data:
+          type: anitya
+          project-id: 13150
+          url-template: https://download.gnome.org/sources/libsecret/$major.$minor/libsecret-$version.tar.xz
 
   - name: signal-desktop
     buildsystem: simple
@@ -82,8 +89,8 @@ modules:
     sources:
       - type: file
         dest-filename: signal-desktop.deb
-        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_7.44.0_amd64.deb
-        sha256: e54c359629ee1c9d8b1caf7fc06b743458292f92c45f30be3ab47faf6d876761
+        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_7.72.1_amd64.deb
+        sha256: 53d185618402e33405f87a7a83be3bb3c456966faee84c5f95d103f7365d4413
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop
