@@ -88,5 +88,8 @@ echo "Debug: Will run signal with the following arguments:" "${EXTRA_ARGS[@]}"
 echo "Debug: Additionally, user gave: $*"
 
 export TMPDIR="${XDG_RUNTIME_DIR}/app/${FLATPAK_ID}"
-# We can't export to "/app/Signal Beta" because chromium trips over the whitespace
+
+# chromium leaks tmpfiles for some reason; let's delete the old ones so we
+# don't fill up peoples XDG_RUNTIME_DIRs and cause strange failures.
+rm "${TMPDIR}/.org.chromium.Chromium."*
 exec zypak-wrapper "/app/Signal/signal-desktop-beta" "${EXTRA_ARGS[@]}" "$@"
