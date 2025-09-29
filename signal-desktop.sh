@@ -89,7 +89,8 @@ echo "Debug: Additionally, user gave: $*"
 
 export TMPDIR="${XDG_RUNTIME_DIR}/app/${FLATPAK_ID}"
 
-# chromium leaks tmpfiles for some reason; let's delete the old ones so we
-# don't fill up peoples XDG_RUNTIME_DIRs and cause strange failures.
-rm "${TMPDIR}/.org.chromium.Chromium."*
+# Chromium leaks tmpfiles, cleanup any old ones
+find "${TMPDIR}" -name ".org.chromium.Chromium.*" -delete
+
+# Finally launch signal
 exec zypak-wrapper "/app/Signal/signal-desktop" "${EXTRA_ARGS[@]}" "$@"
