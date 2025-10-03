@@ -49,11 +49,6 @@ esac
 # add wayland specific command line arguments
 if [[ ${XDG_SESSION_TYPE:-} == "wayland" ]]; then
     EXTRA_ARGS+=("--enable-wayland-ime" "--wayland-text-input-version=3")
-
-    # work around electron's broken wayland detection
-    # TODO: remove when signal uses an electron release that includes the fix
-    # https://github.com/electron/electron/pull/48301
-    EXTRA_ARGS+=("--ozone-platform=wayland")
 fi
 
 # Warn the user about plaintext password
