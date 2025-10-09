@@ -26,6 +26,7 @@ finish-args:
   - --talk-name=org.freedesktop.ScreenSaver
   # Secrets storage
   - --talk-name=org.freedesktop.secrets
+  - --talk-name=org.kde.kwalletd6
   # These are for notifications/tray icons
   - --talk-name=org.gnome.Mutter.IdleMonitor
   - --talk-name=org.kde.StatusNotifierWatcher
