@@ -10,7 +10,7 @@ finish-args:
   # X11 performance
   - --share=ipc
   # We need X11
-  - --socket=x11
+  - --socket=fallback-x11
   # Access to wayland
   - --socket=wayland
   # Audio Access
@@ -90,8 +90,8 @@ modules:
     sources:
       - type: file
         dest-filename: signal-desktop.deb
-        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_7.68.0_amd64.deb
-        sha256: c34031fc5369a4a2d71650480b5a8cbbb9230ffd2c49a9c5bd8ee9368b455ad2
+        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_7.75.1_amd64.deb
+        sha256: 113385bba677805c56a3b599dff6725e18a2477d4f7ad99038e49b2bb736c522
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop

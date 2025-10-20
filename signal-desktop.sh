@@ -31,11 +31,6 @@ EXTRA_ARGS=()
 declare -i SIGNAL_DISABLE_GPU="${SIGNAL_DISABLE_GPU:-0}"
 declare -i SIGNAL_DISABLE_GPU_SANDBOX="${SIGNAL_DISABLE_GPU_SANDBOX:-0}"
 
-# only kept for backward compatibility
-if ((${SIGNAL_USE_WAYLAND:-0})); then
-    export ELECTRON_OZONE_PLATFORM_HINT="${ELECTRON_OZONE_PLATFORM_HINT:-auto}"
-fi
-
 declare -r SIGNAL_PASSWORD_STORE="${SIGNAL_PASSWORD_STORE:-basic}"
 
 case "${SIGNAL_PASSWORD_STORE}" in
@@ -51,7 +46,8 @@ basic | gnome-libsecret | kwallet | kwallet5 | kwallet6)
     ;;
 esac
 
-if [[ "${ELECTRON_OZONE_PLATFORM_HINT}" == "auto" || "${ELECTRON_OZONE_PLATFORM_HINT}" == "wayland" ]]; then
+# add wayland specific command line arguments
+if [[ ${XDG_SESSION_TYPE:-} == "wayland" ]]; then
     EXTRA_ARGS+=("--enable-wayland-ime" "--wayland-text-input-version=3")
 fi
 
@@ -87,4 +83,9 @@ echo "Debug: Will run signal with the following arguments:" "${EXTRA_ARGS[@]}"
 echo "Debug: Additionally, user gave: $*"
 
 export TMPDIR="${XDG_RUNTIME_DIR}/app/${FLATPAK_ID}"
+
+# Chromium leaks tmpfiles, cleanup any old ones
+find "${TMPDIR}" -name ".org.chromium.Chromium.*" -delete
+
+# Finally launch signal
 exec zypak-wrapper "/app/Signal/signal-desktop" "${EXTRA_ARGS[@]}" "$@"
