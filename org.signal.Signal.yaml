@@ -22,9 +22,9 @@ finish-args:
   - --share=network
   # We need to be able to inhibit sleep
   - --system-talk-name=org.freedesktop.login1
-  - --talk-name=org.gnome.SessionManager
   - --talk-name=org.freedesktop.PowerManagement
   - --talk-name=org.freedesktop.ScreenSaver
+  - --talk-name=org.gnome.SessionManager
   # Secrets storage
   - --talk-name=org.freedesktop.secrets
   # These are for notifications/tray icons
@@ -35,7 +35,6 @@ finish-args:
   - --talk-name=org.gnome.Mutter.IdleMonitor
   - --talk-name=org.kde.StatusNotifierWatcher
   # Environment Variables to control the behavior
-  - --env=SIGNAL_USE_WAYLAND=0
   - --env=SIGNAL_DISABLE_GPU=0
   - --env=SIGNAL_DISABLE_GPU_SANDBOX=0
   - --env=SIGNAL_PASSWORD_STORE=basic
@@ -43,7 +42,6 @@ finish-args:
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
 
 modules:
-
   - name: signal-desktop-beta
     buildsystem: simple
     build-commands:
