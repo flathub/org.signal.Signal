@@ -46,11 +46,6 @@ basic | gnome-libsecret | kwallet | kwallet5 | kwallet6)
     ;;
 esac
 
-# add wayland specific command line arguments
-if [[ ${XDG_SESSION_TYPE:-} == "wayland" ]]; then
-    EXTRA_ARGS+=("--enable-wayland-ime" "--wayland-text-input-version=3")
-fi
-
 # Warn the user about plaintext password
 # - if the user chose basic (this is the default)
 # - and Signal starts for the first time
