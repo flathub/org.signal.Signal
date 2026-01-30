@@ -15,6 +15,7 @@ finish-args:
   - --socket=wayland
   # Audio Access
   - --socket=pulseaudio
+  - --filesystem=xdg-run/pipewire-0
   # All devices (camera, microphone for calls)
   - --device=all
   # Network Access
