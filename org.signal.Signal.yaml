@@ -10,7 +10,7 @@ finish-args:
   # X11 performance
   - --share=ipc
   # We need X11
-  - --socket=fallback-x11
+  - --socket=x11
   # Access to wayland
   - --socket=wayland
   # Audio Access
@@ -21,18 +21,21 @@ finish-args:
   - --share=network
   # We need to be able to inhibit sleep
   - --system-talk-name=org.freedesktop.login1
+  - --talk-name=org.gnome.SessionManager
   - --talk-name=org.freedesktop.PowerManagement
   - --talk-name=org.freedesktop.ScreenSaver
-  - --talk-name=org.gnome.SessionManager
   # Secrets storage
   - --talk-name=org.freedesktop.secrets
+  - --talk-name=org.kde.kwalletd6
   # These are for notifications/tray icons
-  - --talk-name=com.canonical.AppMenu.Registrar
-  - --talk-name=com.canonical.Unity
-  - --talk-name=com.canonical.indicator.application
-  - --talk-name=org.ayatana.indicator.application
   - --talk-name=org.gnome.Mutter.IdleMonitor
   - --talk-name=org.kde.StatusNotifierWatcher
+  - --talk-name=com.canonical.AppMenu.Registrar
+  - --talk-name=com.canonical.indicator.application
+  - --talk-name=org.ayatana.indicator.application
+  # This is needed for the notification count badge in DEs that implement
+  # the Untiy protocol for this functionality (e.g. KDE)
+  - --talk-name=com.canonical.Unity
   # Environment Variables to control the behavior
   - --env=SIGNAL_DISABLE_GPU=0
   - --env=SIGNAL_DISABLE_GPU_SANDBOX=0
@@ -41,6 +44,29 @@ finish-args:
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
 
 modules:
+  - name: libsecret
+    buildsystem: meson
+    config-opts:
+      - -Dmanpage=false
+      - -Dcrypto=disabled
+      - -Dvapi=false
+      - -Dgtk_doc=false
+      - -Dintrospection=false
+      - -Dbash_completion=disabled
+    cleanup:
+      - /bin
+      - /include
+      - /lib/pkgconfig
+      - /share/man
+    sources:
+      - type: archive
+        url: https://download.gnome.org/sources/libsecret/0.21/libsecret-0.21.7.tar.xz
+        sha256: 6b452e4750590a2b5617adc40026f28d2f4903de15f1250e1d1c40bfd68ed55e
+        x-checker-data:
+          type: anitya
+          project-id: 13150
+          url-template: https://download.gnome.org/sources/libsecret/$major.$minor/libsecret-$version.tar.xz
+
   - name: signal-desktop
     buildsystem: simple
     build-commands:
@@ -64,8 +90,8 @@ modules:
     sources:
       - type: file
         dest-filename: signal-desktop.deb
-        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_7.88.0_amd64.deb
-        sha256: c2c3bb417fdfb90b7689be351a7089f73c331db5405a3a74f8d7fa51cf52d98f
+        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_7.68.0_amd64.deb
+        sha256: c34031fc5369a4a2d71650480b5a8cbbb9230ffd2c49a9c5bd8ee9368b455ad2
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop
