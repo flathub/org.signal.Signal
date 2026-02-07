@@ -27,6 +27,7 @@ finish-args:
   - --talk-name=org.gnome.SessionManager
   # Secrets storage
   - --talk-name=org.freedesktop.secrets
+  - --talk-name=org.kde.kwalletd6
   # These are for notifications/tray icons
   - --talk-name=com.canonical.AppMenu.Registrar
   - --talk-name=com.canonical.Unity
@@ -65,8 +66,8 @@ modules:
     sources:
       - type: file
         dest-filename: signal-desktop.deb
-        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_7.86.0_amd64.deb
-        sha256: f84e35984d748eee0415caa4881dacc50d8a111b709729bc3b2a87287b57d6c6
+        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_7.88.0_amd64.deb
+        sha256: c2c3bb417fdfb90b7689be351a7089f73c331db5405a3a74f8d7fa51cf52d98f
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop
