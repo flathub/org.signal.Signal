@@ -38,6 +38,7 @@ finish-args:
   - --env=SIGNAL_DISABLE_GPU=0
   - --env=SIGNAL_DISABLE_GPU_SANDBOX=0
   - --env=SIGNAL_PASSWORD_STORE=basic
+  - --env=CHROME_DESKTOP=org.signal.Signal.desktop
   # Use same mouse cursors as host
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
 
@@ -61,7 +62,6 @@ modules:
       - desktop-file-edit --set-key=Exec --set-value='signal-desktop %U' "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
       - desktop-file-edit --set-key=Icon --set-value="${FLATPAK_ID}" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
       - desktop-file-edit --set-key=X-Flatpak-RenamedFrom --set-value='signal-desktop.desktop;' "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
-      - patch-electron-desktop-filename "${FLATPAK_DEST}/Signal/resources/app.asar"
     sources:
       - type: file
         dest-filename: signal-desktop.deb
