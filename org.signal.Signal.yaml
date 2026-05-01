@@ -50,11 +50,9 @@ modules:
         bsdtar -Oxf signal-desktop-beta.deb 'data.tar.xz' |
           bsdtar -xf - \
             --exclude='./usr/share/doc'
+      - mv "opt/Signal Beta" "${FLATPAK_DEST}/Signal"
+      - install -Dm0644 "usr/share/applications/signal-desktop-beta.desktop" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
       - |
-        mv "opt/Signal Beta" "${FLATPAK_DEST}/Signal"
-
-        install -Dm0644 "usr/share/applications/signal-desktop-beta.desktop" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
-
         for size in 16 24 32 48 64 128 256 512; do
           install -Dm0644 "usr/share/icons/hicolor/${size}x${size}/apps/signal-desktop-beta.png" "${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/${FLATPAK_ID}.png"
         done
@@ -82,3 +80,5 @@ modules:
         path: signal-desktop.sh
       - type: file
         path: org.signal.Signal.metainfo.xml
+      - type: file
+        path: LICENSE.signal-desktop
