@@ -51,7 +51,6 @@ modules:
             --exclude='./usr/share/doc'
       - mv "opt/Signal" "${FLATPAK_DEST}/Signal"
       - install -Dm0644 "usr/share/applications/signal-desktop.desktop" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
-
       - |
         for size in 16 24 32 48 64 128 256 512; do
           install -Dm0644 "usr/share/icons/hicolor/${size}x${size}/apps/signal-desktop.png" "${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/${FLATPAK_ID}.png"
@@ -79,3 +78,5 @@ modules:
         path: signal-desktop.sh
       - type: file
         path: org.signal.Signal.metainfo.xml
+      - type: file
+        path: LICENSE.signal-desktop
