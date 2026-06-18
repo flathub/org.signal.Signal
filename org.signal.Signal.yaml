@@ -75,6 +75,18 @@ modules:
         only-arches:
           - x86_64
       - type: file
+        dest-filename: signal-desktop.deb
+        url: https://updates.signal.org/desktop/apt-arm64/pool/s/signal-desktop/signal-desktop_8.25.0_arm64.deb
+        sha256: f4fb120aa0d1ca5fd334fa911055e82f0b4fab5143da025a39fcd48d9c2c74e8
+        x-checker-data:
+          type: debian-repo
+          package-name: signal-desktop
+          root: https://updates.signal.org/desktop/apt
+          dist: xenial
+          component: main
+        only-arches:
+          - aarch64
+      - type: file
         path: signal-desktop.sh
       - type: file
         path: org.signal.Signal.metainfo.xml
