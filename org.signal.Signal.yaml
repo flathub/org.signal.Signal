@@ -77,6 +77,18 @@ modules:
         only-arches:
           - x86_64
       - type: file
+        dest-filename: signal-desktop-beta.deb
+        url: https://updates.signal.org/desktop/apt-arm64/pool/s/signal-desktop-beta/signal-desktop-beta_8.23.0-beta.1_arm64.deb
+        sha256: f37f44892d1d8dced2bf7374b97cf8666c9325551076a001d9b2c4e4ab692482
+        x-checker-data:
+          type: debian-repo
+          package-name: signal-desktop-beta
+          root: https://updates.signal.org/desktop/apt-arm64
+          dist: stable
+          component: main
+        only-arches:
+          - aarch64
+      - type: file
         path: signal-desktop.sh
       - type: file
         path: org.signal.Signal.metainfo.xml
