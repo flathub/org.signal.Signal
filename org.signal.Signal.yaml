@@ -66,14 +66,11 @@ modules:
         dest-filename: signal-desktop.deb
         url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_8.25.0_amd64.deb
         sha256: bb071ec2433305d5ed8ec6572b7aceb14b75bf2dd36b2b13b957d567e3f4124e
+        only-arches: [x86_64]
         x-checker-data:
-          type: debian-repo
-          package-name: signal-desktop
-          root: https://updates.signal.org/desktop/apt
-          dist: xenial
-          component: main
-        only-arches:
-          - x86_64
+          type: anitya
+          project-id: 14802
+          url-template: https://updates.signal.org/desktop/apt/pool/s/signal-desktop-beta/signal-desktop-beta_${version}_amd64.deb
       - type: file
         path: signal-desktop.sh
       - type: file
