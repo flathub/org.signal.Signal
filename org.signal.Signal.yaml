@@ -66,8 +66,8 @@ modules:
     sources:
       - type: file
         dest-filename: signal-desktop-beta.deb
-        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop-beta/signal-desktop-beta_8.25.0-beta.1_amd64.deb
-        sha256: 9809148b3adfd468b98e4314ab0ab0cd244129cbaf23e3ca03cf11dd857153e4
+        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop-beta/signal-desktop-beta_8.26.0-beta.1_amd64.deb
+        sha256: b5000466fe02caf40b625e70eda3beda8e40defc0d309c4f9dcabc54a66641a7
         only-arches: [x86_64]
         x-checker-data:
           type: anitya
@@ -76,8 +76,8 @@ modules:
           url-template: https://updates.signal.org/desktop/apt/pool/s/signal-desktop-beta/signal-desktop-beta_${version}_amd64.deb
       - type: file
         dest-filename: signal-desktop-beta.deb
-        url: https://updates.signal.org/desktop/apt-arm64/pool/s/signal-desktop-beta/signal-desktop-beta_8.25.0-beta.1_arm64.deb
-        sha256: 7919762ca853996091ad494f49b364242ecec377a8b274ba40dec9f00d0cd0aa
+        url: https://updates.signal.org/desktop/apt-arm64/pool/s/signal-desktop-beta/signal-desktop-beta_8.26.0-beta.1_arm64.deb
+        sha256: 04c2ff7b4b3cc5ab97a60696ed105a3b1c74b968d4ee2fe59a82316c5e6044fa
         only-arches: [aarch64]
         x-checker-data:
           type: anitya
