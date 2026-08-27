@@ -70,20 +70,22 @@ modules:
         sha256: b5000466fe02caf40b625e70eda3beda8e40defc0d309c4f9dcabc54a66641a7
         only-arches: [x86_64]
         x-checker-data:
-          type: anitya
-          project-id: 14802
-          stable-only: false
-          url-template: https://updates.signal.org/desktop/apt/pool/s/signal-desktop-beta/signal-desktop-beta_${version}_amd64.deb
+          type: debian-repo
+          package-name: signal-desktop-beta
+          root: https://updates.signal.org/desktop/apt
+          dist: xenial
+          component: main
       - type: file
         dest-filename: signal-desktop-beta.deb
         url: https://updates.signal.org/desktop/apt-arm64/pool/s/signal-desktop-beta/signal-desktop-beta_8.26.0-beta.1_arm64.deb
         sha256: 04c2ff7b4b3cc5ab97a60696ed105a3b1c74b968d4ee2fe59a82316c5e6044fa
         only-arches: [aarch64]
         x-checker-data:
-          type: anitya
-          project-id: 14802
-          stable-only: false
-          url-template: https://updates.signal.org/desktop/apt-arm64/pool/s/signal-desktop-beta/signal-desktop-beta_${version}_arm64.deb
+          type: debian-repo
+          package-name: signal-desktop-beta
+          root: https://updates.signal.org/desktop/apt-arm64
+          dist: stable
+          component: main
       - type: file
         path: signal-desktop.sh
       - type: file
