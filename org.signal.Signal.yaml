@@ -46,7 +46,7 @@ modules:
     buildsystem: simple
     build-commands:
       - |
-        bsdtar -Oxf signal-desktop.deb 'data.tar.xz' |
+        bsdtar -Oxf signal-desktop_*.deb 'data.tar.xz' |
           bsdtar -xf - \
             --exclude='./usr/share/doc'
       - mv "opt/Signal" "${FLATPAK_DEST}/Signal"
@@ -63,29 +63,27 @@ modules:
       - patch-electron-desktop-filename "${FLATPAK_DEST}/Signal/resources/app.asar"
     sources:
       - type: file
-        dest-filename: signal-desktop.deb
+        dest-filename: signal-desktop_amd64.deb
         url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_8.26.0_amd64.deb
         sha256: 5265d3e3090a9785393c7547f8d720658d04ee717efb5810e01de2221b032b3d
+        only-arches: [x86_64]
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop
           root: https://updates.signal.org/desktop/apt
           dist: xenial
           component: main
-        only-arches:
-          - x86_64
       - type: file
-        dest-filename: signal-desktop.deb
-        url: https://updates.signal.org/desktop/apt-arm64/pool/s/signal-desktop/signal-desktop_8.25.0_arm64.deb
-        sha256: f4fb120aa0d1ca5fd334fa911055e82f0b4fab5143da025a39fcd48d9c2c74e8
+        dest-filename: signal-desktop_arm64.deb
+        url: https://updates.signal.org/desktop/apt-arm64/pool/s/signal-desktop/signal-desktop_8.26.0_arm64.deb
+        sha256: cdbba316c94697c3731ae4b9a3e8174a2a19d624078b67e725015e23cc1ee35c
+        only-arches: [aarch64]
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop
-          root: https://updates.signal.org/desktop/apt
-          dist: xenial
+          root: https://updates.signal.org/desktop/apt-arm64
+          dist: stable
           component: main
-        only-arches:
-          - aarch64
       - type: file
         path: signal-desktop.sh
       - type: file
