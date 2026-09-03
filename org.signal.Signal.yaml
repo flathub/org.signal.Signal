@@ -2,7 +2,7 @@ id: org.signal.Signal
 base: org.electronjs.Electron2.BaseApp
 base-version: '25.08'
 runtime: org.freedesktop.Platform
-runtime-version: '25.08'
+runtime-version: '26.08'
 sdk: org.freedesktop.Sdk
 default-branch: beta
 command: signal-desktop-beta
@@ -47,7 +47,7 @@ modules:
     buildsystem: simple
     build-commands:
       - |
-        bsdtar -Oxf signal-desktop-beta.deb 'data.tar.xz' |
+        bsdtar -Oxf signal-desktop-beta_*.deb 'data.tar.xz' |
           bsdtar -xf - \
             --exclude='./usr/share/doc'
       - mv "opt/Signal Beta" "${FLATPAK_DEST}/Signal"
@@ -65,7 +65,7 @@ modules:
       - patch-electron-desktop-filename "${FLATPAK_DEST}/Signal/resources/app.asar"
     sources:
       - type: file
-        dest-filename: signal-desktop-beta.deb
+        dest-filename: signal-desktop-beta_amd64.deb
         url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop-beta/signal-desktop-beta_8.26.0-beta.1_amd64.deb
         sha256: b5000466fe02caf40b625e70eda3beda8e40defc0d309c4f9dcabc54a66641a7
         only-arches: [x86_64]
@@ -76,7 +76,7 @@ modules:
           dist: xenial
           component: main
       - type: file
-        dest-filename: signal-desktop-beta.deb
+        dest-filename: signal-desktop-beta_arm64.deb
         url: https://updates.signal.org/desktop/apt-arm64/pool/s/signal-desktop-beta/signal-desktop-beta_8.26.0-beta.1_arm64.deb
         sha256: 04c2ff7b4b3cc5ab97a60696ed105a3b1c74b968d4ee2fe59a82316c5e6044fa
         only-arches: [aarch64]
