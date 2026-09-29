@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Signal
+GenericName=Private Messenger
+Comment=Private messaging from your desktop
+Exec=signal-desktop %U
+Terminal=false
+Type=Application
+Icon=org.signal.Signal
+Categories=Network;InstantMessaging;Chat;
+StartupWMClass=signal

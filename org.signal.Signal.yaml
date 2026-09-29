@@ -4,6 +4,8 @@ base-version: '26.08'
 runtime: org.freedesktop.Platform
 runtime-version: '26.08'
 sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.node24
 command: signal-desktop
 separate-locales: false
 finish-args:
@@ -44,16 +46,36 @@ finish-args:
 modules:
   - name: signal-desktop
     buildsystem: simple
+    build-options:
+      append-path: /usr/lib/sdk/node24/bin
+      prepend-path: /run/build/signal-desktop/pnpm-home:/run/build/signal-desktop/bin
+      env:
+        npm_config_nodedir: /usr/lib/sdk/node24
+        PNPM_HOME: /run/build/signal-desktop/pnpm-home
+        # package.json's file list references this env var.
+        SIGNAL_ENV: production
     build-commands:
       - |
-        bsdtar -Oxf signal-desktop_*.deb 'data.tar.xz' |
-          bsdtar -xf - \
-            --exclude='./usr/share/doc'
-      - mv "opt/Signal" "${FLATPAK_DEST}/Signal"
-      - install -Dm0644 "usr/share/applications/signal-desktop.desktop" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
+        set -e
+        mkdir -p pnpm-cli bin
+        tar -xzf pnpm-11.24.0.tgz -C pnpm-cli --strip-components=1
+        # pnpm.mjs has its own "#!/usr/bin/env node" shebang and is already executable.
+        ln -s ../pnpm-cli/bin/pnpm.mjs bin/pnpm
+        # Skip pnpm 11's online supply-chain verification (needs registry metadata we don't have offline); we trust this pinned lockfile.
+        echo "trustLockfile: true" >> pnpm-workspace.yaml
+        pnpm install --offline --frozen-lockfile
+        # ringrtc's prebuilt-fetch install script no-ops under pnpm 11 (npm_package_config_* isn't populated); extract the same artifact ourselves.
+        tar -xzf ringrtc-desktop-build-v2.71.0.tar.gz -C node_modules/@signalapp/ringrtc
+        pnpm run build:policy-files
+        pnpm run generate
+        pnpm run build:rolldown:prod
+        # electron-builder's patched cache scheme differs from flatpak-node-generator's; point it at our pre-fetched electron zip directly.
+        pnpm exec electron-builder --linux dir --publish=never --config.directories.output=release --config.electronDist=flatpak-node/cache/electron
+      - mv release/linux-*unpacked "${FLATPAK_DEST}/Signal"
+      - install -Dm0644 "org.signal.Signal.desktop" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
       - |
         for size in 16 24 32 48 64 128 256 512; do
-          install -Dm0644 "usr/share/icons/hicolor/${size}x${size}/apps/signal-desktop.png" "${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/${FLATPAK_ID}.png"
+          install -Dm0644 "build/icons/png/${size}x${size}.png" "${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/${FLATPAK_ID}.png"
         done
       - install -Dm0755 signal-desktop.sh "${FLATPAK_DEST}/bin/signal-desktop"
       - install -Dm0644 "${FLATPAK_ID}.metainfo.xml" "${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml"
@@ -62,30 +84,33 @@ modules:
       - desktop-file-edit --set-key=X-Flatpak-RenamedFrom --set-value='signal-desktop.desktop;' "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
       - patch-electron-desktop-filename "${FLATPAK_DEST}/Signal/resources/app.asar"
     sources:
-      - type: file
-        dest-filename: signal-desktop_amd64.deb
-        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_8.29.0_amd64.deb
-        sha256: 3c975e07fe8cd8a2d85b74fec22b944c78b6d38d9687facbf48abc566113d550
-        only-arches: [x86_64]
+      # Pinned to a release tag, not a branch: generated-sources.json is derived
+      # from this tree's pnpm-lock.yaml and has to be regenerated whenever the tag
+      # moves, so the checker below cannot be left to bump it unattended.
+      - type: git
+        url: https://github.com/signalapp/Signal-Desktop.git
+        tag: v8.28.0
+        commit: b5213e3c3a28dc994476f2a79c24f0fce58eee3f
         x-checker-data:
-          type: debian-repo
-          package-name: signal-desktop
-          root: https://updates.signal.org/desktop/apt
-          dist: xenial
-          component: main
+          type: git
+          # Stable releases only; beta tags look like v8.28.0-beta.3.
+          tag-pattern: '^v([\d.]+)$'
+          version-scheme: semantic
+          is-main-source: true
+      # In a checkout of the pinned commit, with a flatpak-node-generator that reads pnpm 11's two-document lockfile (flatpak/flatpak-builder-tools#559):
+      # flatpak-node-generator pnpm pnpm-lock.yaml -o generated-sources.json --node-sdk-extension org.freedesktop.Sdk.Extension.node24//26.08 --pnpm-store-version v11
+      - generated-sources.json
       - type: file
-        dest-filename: signal-desktop_arm64.deb
-        url: https://updates.signal.org/desktop/apt-arm64/pool/s/signal-desktop/signal-desktop_8.29.0_arm64.deb
-        sha256: 2f7205ab6425acb5ac184b81bc8511276409c9540638e3ced1501d67e257b9b2
-        only-arches: [aarch64]
-        x-checker-data:
-          type: debian-repo
-          package-name: signal-desktop
-          root: https://updates.signal.org/desktop/apt-arm64
-          dist: stable
-          component: main
+        url: https://build-artifacts.signal.org/libraries/ringrtc-desktop-build-v2.71.0.tar.gz
+        sha256: 0b5b0560d00e090070ecac783e7869bd49412786ce8a3aac01b87ae88ea8d66f
+      - type: file
+        # Straight from the registry, not corepack: it can neither write into the read-only SDK mount nor fetch itself offline.
+        url: https://registry.npmjs.org/pnpm/-/pnpm-11.24.0.tgz
+        sha256: d1eab2433172661cc36a18ec85fce93f771db1962717329cc01ec9c2824ca24f
       - type: file
         path: signal-desktop.sh
+      - type: file
+        path: org.signal.Signal.desktop
       - type: file
         path: org.signal.Signal.metainfo.xml
       - type: file
