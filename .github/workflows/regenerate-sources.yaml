@@ -1,0 +1,55 @@
+name: Regenerate vendored sources
+on:
+  workflow_dispatch: {}
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'flathub'
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Install flatpak-node-generator
+        run: |
+          # Includes https://github.com/flatpak/flatpak-builder-tools/pull/559 (reads pnpm 11's two-document lockfile).
+          git init -q /tmp/flatpak-builder-tools
+          git -C /tmp/flatpak-builder-tools fetch -q --depth 1 https://github.com/flatpak/flatpak-builder-tools.git 74697c75b630d7330e77250fc13cb5ea688d9479
+          git -C /tmp/flatpak-builder-tools checkout -q FETCH_HEAD
+          pip install /tmp/flatpak-builder-tools/node
+
+      - name: Read the pinned Signal-Desktop tag, runtime version and Node SDK extension from the manifest
+        id: pin
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import yaml
+          manifest = yaml.safe_load(open("org.signal.Signal.yaml"))
+          print(f"sd_tag={manifest['modules'][0]['sources'][0]['tag']}")
+          print(f"runtime={manifest['runtime-version']}")
+          node_ext = next(e for e in manifest["sdk-extensions"] if e.startswith("org.freedesktop.Sdk.Extension.node"))
+          print(f"node_ext={node_ext}")
+          PY
+
+      - name: Check out Signal-Desktop at its pinned tag
+        run: git clone --depth 1 --branch "${{ steps.pin.outputs.sd_tag }}" https://github.com/signalapp/Signal-Desktop.git /tmp/Signal-Desktop
+
+      - name: Regenerate generated-sources.json
+        run: |
+          flatpak-node-generator pnpm /tmp/Signal-Desktop/pnpm-lock.yaml -o generated-sources.json --node-sdk-extension ${{ steps.pin.outputs.node_ext }}//${{ steps.pin.outputs.runtime }} --pnpm-store-version v11
+
+      - name: Commit changes
+        env:
+          GIT_AUTHOR_NAME: Flatpak External Data Checker
+          GIT_COMMITTER_NAME: Flatpak External Data Checker
+          GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: |
+          git add generated-sources.json
+          git diff --cached --quiet || git commit -m "Regenerate generated-sources.json"
+          git push
