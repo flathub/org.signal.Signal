@@ -69,8 +69,13 @@ modules:
         pnpm run build:policy-files
         pnpm run generate
         pnpm run build:rolldown:prod
+        # A Flatpak can't update itself, and the Linux updater refuses to start outside an ASAR.
+        jq '.updatesEnabled = false' config/production.json > config/production.json.new
+        mv config/production.json.new config/production.json
         # electron-builder's patched cache scheme differs from flatpak-node-generator's; point it at our pre-fetched electron zip directly.
-        pnpm exec electron-builder --linux dir --publish=never --config.directories.output=release --config.electronDist=flatpak-node/cache/electron
+        pnpm exec electron-builder --linux dir --publish=never --config.directories.output=release --config.electronDist=flatpak-node/cache/electron --config.asar=false
+        # Signal's afterPack fuses Electron to load only from an ASAR; undo that for the plain app directory.
+        pnpm exec electron-fuses write --app release/linux-*unpacked/signal-desktop OnlyLoadAppFromAsar=off
       - mv release/linux-*unpacked "${FLATPAK_DEST}/Signal"
       - install -Dm0644 "org.signal.Signal.desktop" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
       - |
@@ -82,7 +87,10 @@ modules:
       - desktop-file-edit --set-key=Exec --set-value='signal-desktop %U' "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
       - desktop-file-edit --set-key=Icon --set-value="${FLATPAK_ID}" "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
       - desktop-file-edit --set-key=X-Flatpak-RenamedFrom --set-value='signal-desktop.desktop;' "${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop"
-      - patch-electron-desktop-filename "${FLATPAK_DEST}/Signal/resources/app.asar"
+      - |
+        app="${FLATPAK_DEST}/Signal/resources/app"
+        jq --arg name "${FLATPAK_ID}.desktop" '.desktopName = $name' "${app}/package.json" > "${app}/package.json.new"
+        mv "${app}/package.json.new" "${app}/package.json"
     sources:
       # Pinned to a release tag, not a branch: generated-sources.json is derived
       # from this tree's pnpm-lock.yaml and has to be regenerated whenever the tag
