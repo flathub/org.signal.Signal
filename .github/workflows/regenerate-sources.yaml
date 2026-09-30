@@ -16,32 +16,41 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install flatpak-node-generator
+      - name: Install flatpak-node-generator and flatpak-cargo-generator
         run: |
           # Includes https://github.com/flatpak/flatpak-builder-tools/pull/559 (reads pnpm 11's two-document lockfile).
           git init -q /tmp/flatpak-builder-tools
           git -C /tmp/flatpak-builder-tools fetch -q --depth 1 https://github.com/flatpak/flatpak-builder-tools.git 74697c75b630d7330e77250fc13cb5ea688d9479
           git -C /tmp/flatpak-builder-tools checkout -q FETCH_HEAD
           pip install /tmp/flatpak-builder-tools/node
+          pip install "aiohttp<4.0.0,>=3.9.5" "PyYAML<7.0.0,>=6.0.2" "tomlkit>=0.13.3,<1.0"
 
-      - name: Read the pinned Signal-Desktop tag, runtime version and Node SDK extension from the manifest
+      - name: Read pinned refs, runtime version and Node SDK extension from the manifest
         id: pin
         run: |
           python3 - <<'PY' >> "$GITHUB_OUTPUT"
           import yaml
           manifest = yaml.safe_load(open("org.signal.Signal.yaml"))
-          print(f"sd_tag={manifest['modules'][0]['sources'][0]['tag']}")
+          sources = manifest["modules"][0]["sources"]
+          sqlcipher = next(s for s in sources if isinstance(s, dict) and s.get("dest") == "sqlcipher-src")
+          print(f"sd_tag={sources[0]['tag']}")
           print(f"runtime={manifest['runtime-version']}")
           node_ext = next(e for e in manifest["sdk-extensions"] if e.startswith("org.freedesktop.Sdk.Extension.node"))
           print(f"node_ext={node_ext}")
+          print(f"sc_tag={sqlcipher['tag']}")
           PY
 
-      - name: Check out Signal-Desktop at its pinned tag
-        run: git clone --depth 1 --branch "${{ steps.pin.outputs.sd_tag }}" https://github.com/signalapp/Signal-Desktop.git /tmp/Signal-Desktop
+      - name: Check out Signal-Desktop and node-sqlcipher at their pinned tags
+        run: |
+          git clone --depth 1 --branch "${{ steps.pin.outputs.sd_tag }}" https://github.com/signalapp/Signal-Desktop.git /tmp/Signal-Desktop
+          git clone --depth 1 --branch "${{ steps.pin.outputs.sc_tag }}" https://github.com/signalapp/node-sqlcipher.git /tmp/sqlcipher-src
 
       - name: Regenerate generated-sources.json
         run: |
           flatpak-node-generator pnpm /tmp/Signal-Desktop/pnpm-lock.yaml -o generated-sources.json --node-sdk-extension ${{ steps.pin.outputs.node_ext }}//${{ steps.pin.outputs.runtime }} --pnpm-store-version v11
+
+      - name: Regenerate sqlcipher-extension-cargo-sources.json
+        run: python3 /tmp/flatpak-builder-tools/cargo/flatpak-cargo-generator.py /tmp/sqlcipher-src/deps/extension/Cargo.lock -o sqlcipher-extension-cargo-sources.json
 
       - name: Commit changes
         env:
@@ -50,6 +59,6 @@ jobs:
           GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
           GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
         run: |
-          git add generated-sources.json
-          git diff --cached --quiet || git commit -m "Regenerate generated-sources.json"
+          git add generated-sources.json sqlcipher-extension-cargo-sources.json
+          git diff --cached --quiet || git commit -m "Regenerate vendored sources"
           git push
