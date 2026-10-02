@@ -6,6 +6,7 @@ runtime-version: '26.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.node24
+  - org.freedesktop.Sdk.Extension.rust-stable
 command: signal-desktop
 separate-locales: false
 finish-args:
@@ -47,7 +48,7 @@ modules:
   - name: signal-desktop
     buildsystem: simple
     build-options:
-      append-path: /usr/lib/sdk/node24/bin
+      append-path: /usr/lib/sdk/node24/bin:/usr/lib/sdk/rust-stable/bin
       prepend-path: /run/build/signal-desktop/pnpm-home:/run/build/signal-desktop/bin
       env:
         npm_config_nodedir: /usr/lib/sdk/node24
@@ -57,6 +58,8 @@ modules:
         # flatpak-cargo-generator writes its vendor config to a cargo/ dir in the build root.
         CARGO_HOME: /run/build/signal-desktop/cargo
         CARGO_NET_OFFLINE: 'true'
+        PROTOC: /run/build/signal-desktop/protoc/bin/protoc
+        OUTPUT_DIR: /run/build/signal-desktop/ringrtc-src/out
         CARGO_PROFILE_RELEASE_DEBUG: '2'
     build-commands:
       - |
@@ -65,17 +68,40 @@ modules:
         tar -xzf pnpm-11.24.0.tgz -C pnpm-cli --strip-components=1
         # pnpm.mjs has its own "#!/usr/bin/env node" shebang and is already executable.
         ln -s ../pnpm-cli/bin/pnpm.mjs bin/pnpm
+        # Build RingRTC's native Node addon from source instead of using its
+        # prebuilt (which pnpm 11 can no longer fetch automatically): use the
+        # SDK's Rust extension and vendored Cargo deps, then compile against
+        # Signal's prebuilt WebRTC static library. Building WebRTC itself
+        # from scratch needs Chromium's depot_tools and Google auth, so
+        # that's out of scope here.
+        rust_triple=$(uname -m)-unknown-linux-gnu
+        node_arch=$(node -p process.arch)
+        # Rewrite the vendor path to absolute since we cd into ringrtc-src (needed for its .cargo/config.toml) before invoking cargo.
+        sed -i "s#directory = \"cargo/vendor\"#directory = \"${FLATPAK_BUILDER_BUILDDIR}/cargo/vendor\"#" "${CARGO_HOME}/config"
+        mkdir -p ringrtc-src/out/release/obj
+        tar -xjf webrtc.tar.bz2 -C ringrtc-src/out
+        (
+          cd ringrtc-src
+          # Warn (don't fail) if a future bump needs a newer Rust than the SDK extension provides.
+          required_rust=$(cat rust-toolchain)
+          installed_rust=$(rustc --version | cut -d' ' -f2)
+          printf '%s\n%s\n' "$required_rust" "$installed_rust" | sort -C -V ||
+            echo "warning: ringrtc pins rust-toolchain ${required_rust}, newer than installed rust-stable ${installed_rust}" >&2
+          cargo rustc --offline --package ringrtc --target "${rust_triple}" --features electron --release --crate-type cdylib
+        )
+        install -m 0755 "ringrtc-src/target/${rust_triple}/release/libringrtc.so" "${FLATPAK_BUILDER_BUILDDIR}/libringrtc-${node_arch}.node"
+        # Not needed once we have the addon.
+        rm -rf ringrtc-src/target ringrtc-src/out "${FLATPAK_BUILDER_BUILDDIR}/protoc"
+        rm -f webrtc.tar.bz2
         # Skip pnpm 11's online supply-chain verification (needs registry metadata we don't have offline); we trust this pinned lockfile.
         echo "trustLockfile: true" >> pnpm-workspace.yaml
         pnpm install --offline --frozen-lockfile
-        # ringrtc's prebuilt-fetch install script no-ops under pnpm 11 (npm_package_config_* isn't populated); extract the same artifact ourselves.
-        tar -xzf ringrtc-desktop-build.tar.gz -C node_modules/@signalapp/ringrtc
+        mkdir -p node_modules/@signalapp/ringrtc/build/linux
+        install -m 0755 "${FLATPAK_BUILDER_BUILDDIR}/libringrtc-${node_arch}.node" "node_modules/@signalapp/ringrtc/build/linux/libringrtc-${node_arch}.node"
         # Build @signalapp/sqlcipher's native addon from source: it ships a prebuilt
         # (found automatically by node-gyp-build, so pnpm install never compiles it),
         # overwritten below with our own build using node-sqlcipher's pinned nightly.
         # The fetched tarball's name carries the pinned nightly date.
-        rust_triple=$(uname -m)-unknown-linux-gnu
-        node_arch=$(node -p process.arch)
         rust_tarball=$(ls "rust-nightly-"*"-${rust_triple}.tar.gz")
         pinned_rust=${rust_tarball#rust-}
         pinned_rust=${pinned_rust%-${rust_triple}.tar.gz}
@@ -144,10 +170,6 @@ modules:
       # flatpak-node-generator pnpm pnpm-lock.yaml -o generated-sources.json --node-sdk-extension org.freedesktop.Sdk.Extension.node24//26.08 --pnpm-store-version v11
       - generated-sources.json
       - type: file
-        url: https://build-artifacts.signal.org/libraries/ringrtc-desktop-build-v2.72.0.tar.gz
-        sha256: 5030c683f0f181b0f132e58881c0d5e371f68185141de0e50c865d851b8b01de
-        dest-filename: ringrtc-desktop-build.tar.gz
-      - type: file
         # Straight from the registry, not corepack: it can neither write into the read-only SDK mount nor fetch itself offline.
         url: https://registry.npmjs.org/pnpm/-/pnpm-11.24.0.tgz
         sha256: d1eab2433172661cc36a18ec85fce93f771db1962717329cc01ec9c2824ca24f
@@ -174,8 +196,55 @@ modules:
         sha256: d5845f89ba81af78ebc9c8bca3eb6f03cb67194646a458ac7357aef1e1f43923
         dest-filename: rust-nightly-2026-07-21-aarch64-unknown-linux-gnu.tar.gz
         only-arches: [aarch64]
+      # RingRTC, built from source instead of using its prebuilt binary.
+      # When bumping, check config/version.properties' webrtc.version against
+      # the pinned tarball below (rust-toolchain fitness is checked at build time).
+      - type: git
+        url: https://github.com/signalapp/ringrtc.git
+        commit: a1d2ffed1de6ac5b22458a3dced8374513cc44f8
+        tag: v2.72.0
+        dest: ringrtc-src
+        x-checker-data:
+          type: json
+          parent-id: signal-desktop
+          # The tag to build is whatever version of "@signalapp/ringrtc" Signal-Desktop's own package.json pins at its new tag, not ringrtc's own latest release.
+          tag-data-url: '"https://raw.githubusercontent.com/signalapp/Signal-Desktop/" + $parent.new.tag + "/package.json"'
+          tag-query: '"v" + .dependencies["@signalapp/ringrtc"]'
+          version-query: '$tag | ltrimstr("v")'
+      - type: file
+        url: https://build-artifacts.signal.org/libraries/webrtc-7871k-linux-x64-release.tar.bz2
+        sha256: 7a0100cbdea708318d9cbb29c0e337c5ce9450894f9faf7e965304ff9961d799
+        dest-filename: webrtc.tar.bz2
+        only-arches: [x86_64]
+      - type: file
+        url: https://build-artifacts.signal.org/libraries/webrtc-7871k-linux-arm64-release.tar.bz2
+        sha256: 9e24ef6137aa272bd6d4af9ef72368bde74757ddbe86bea8d02075a2c05c6152
+        dest-filename: webrtc.tar.bz2
+        only-arches: [aarch64]
+      # RingRTC's own "protobuf" crate needs a protoc binary at build time.
+      - type: archive
+        url: https://github.com/protocolbuffers/protobuf/releases/download/v29.3/protoc-29.3-linux-x86_64.zip
+        sha256: 3e866620c5be27664f3d2fa2d656b5f3e09b5152b42f1bedbf427b333e90021a
+        dest: protoc
+        strip-components: 0
+        only-arches: [x86_64]
+      - type: archive
+        url: https://github.com/protocolbuffers/protobuf/releases/download/v29.3/protoc-29.3-linux-aarch_64.zip
+        sha256: 6427349140e01f06e049e707a58709a4f221ae73ab9a0425bc4a00c8d0e1ab32
+        dest: protoc
+        strip-components: 0
+        only-arches: [aarch64]
+      # flatpak-cargo-generator.py <cubeb-sys crate>/src/cubeb-pulse-rs/Cargo.lock -o cubeb-pulse-rs-cargo-sources.json -- the lock it ships can be stale against its own Cargo.toml, so "cargo update -p cubeb-backend --precise <version>" first.
+      - cubeb-pulse-rs-cargo-sources.json
       # flatpak-cargo-generator.py sqlcipher-src/deps/extension/Cargo.lock -o sqlcipher-extension-cargo-sources.json -- node-sqlcipher's bundled Rust FTS5-tokenizer extension.
       - sqlcipher-extension-cargo-sources.json
+      # flatpak-cargo-generator.py ringrtc-src/Cargo.lock -o cargo-sources.json
+      - cargo-sources.json
+      # Each Cargo sources file above writes its own cargo/config and only the last one survives, so this merge of all of them comes last.
+      - type: file
+        path: cargo-config
+        dest: cargo
+        dest-filename: config
       - type: file
         path: signal-desktop.sh
       - type: file
