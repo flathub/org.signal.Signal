@@ -64,8 +64,8 @@ modules:
     sources:
       - type: file
         dest-filename: signal-desktop_amd64.deb
-        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_8.28.0_amd64.deb
-        sha256: fc7bc0d7ef9f123a297063a5b9dbc0a685011990691e4b258e0d915b06c726f6
+        url: https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_8.29.0_amd64.deb
+        sha256: 3c975e07fe8cd8a2d85b74fec22b944c78b6d38d9687facbf48abc566113d550
         only-arches: [x86_64]
         x-checker-data:
           type: debian-repo
@@ -75,8 +75,8 @@ modules:
           component: main
       - type: file
         dest-filename: signal-desktop_arm64.deb
-        url: https://updates.signal.org/desktop/apt-arm64/pool/s/signal-desktop/signal-desktop_8.28.0_arm64.deb
-        sha256: d4dd3c158a0727adac5be919b39df9d45c74d36d911b23c9b9ae333260c7677e
+        url: https://updates.signal.org/desktop/apt-arm64/pool/s/signal-desktop/signal-desktop_8.29.0_arm64.deb
+        sha256: 2f7205ab6425acb5ac184b81bc8511276409c9540638e3ced1501d67e257b9b2
         only-arches: [aarch64]
         x-checker-data:
           type: debian-repo
