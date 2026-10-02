@@ -65,7 +65,7 @@ modules:
         echo "trustLockfile: true" >> pnpm-workspace.yaml
         pnpm install --offline --frozen-lockfile
         # ringrtc's prebuilt-fetch install script no-ops under pnpm 11 (npm_package_config_* isn't populated); extract the same artifact ourselves.
-        tar -xzf ringrtc-desktop-build-v2.71.0.tar.gz -C node_modules/@signalapp/ringrtc
+        tar -xzf ringrtc-desktop-build.tar.gz -C node_modules/@signalapp/ringrtc
         pnpm run build:policy-files
         pnpm run generate
         pnpm run build:rolldown:prod
@@ -97,8 +97,8 @@ modules:
       # moves, so the checker below cannot be left to bump it unattended.
       - type: git
         url: https://github.com/signalapp/Signal-Desktop.git
-        tag: v8.28.0
-        commit: b5213e3c3a28dc994476f2a79c24f0fce58eee3f
+        tag: v8.29.0
+        commit: 66084e9ee4e3f04f4b9ff1c525b767fbf2c759c4
         x-checker-data:
           type: git
           # Stable releases only; beta tags look like v8.28.0-beta.3.
@@ -109,8 +109,9 @@ modules:
       # flatpak-node-generator pnpm pnpm-lock.yaml -o generated-sources.json --node-sdk-extension org.freedesktop.Sdk.Extension.node24//26.08 --pnpm-store-version v11
       - generated-sources.json
       - type: file
-        url: https://build-artifacts.signal.org/libraries/ringrtc-desktop-build-v2.71.0.tar.gz
-        sha256: 0b5b0560d00e090070ecac783e7869bd49412786ce8a3aac01b87ae88ea8d66f
+        url: https://build-artifacts.signal.org/libraries/ringrtc-desktop-build-v2.72.0.tar.gz
+        sha256: 5030c683f0f181b0f132e58881c0d5e371f68185141de0e50c865d851b8b01de
+        dest-filename: ringrtc-desktop-build.tar.gz
       - type: file
         # Straight from the registry, not corepack: it can neither write into the read-only SDK mount nor fetch itself offline.
         url: https://registry.npmjs.org/pnpm/-/pnpm-11.24.0.tgz
