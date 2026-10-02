@@ -200,8 +200,8 @@ modules:
         dest-filename: rust-nightly-2026-07-21-aarch64-unknown-linux-gnu.tar.gz
         only-arches: [aarch64]
       # RingRTC, built from source instead of using its prebuilt binary.
-      # When bumping, check config/version.properties' webrtc.version against
-      # the pinned tarball below (rust-toolchain fitness is checked at build time).
+      # The regenerate workflow checks the WebRTC tarballs below against RingRTC's
+      # own checksums; rust-toolchain fitness is checked at build time.
       - type: git
         url: https://github.com/signalapp/ringrtc.git
         commit: a1d2ffed1de6ac5b22458a3dced8374513cc44f8
