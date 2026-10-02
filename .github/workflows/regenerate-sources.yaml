@@ -39,19 +39,22 @@ jobs:
           sources = manifest["modules"][0]["sources"]
           sqlcipher = next(s for s in sources if isinstance(s, dict) and s.get("dest") == "sqlcipher-src")
           ringrtc = next(s for s in sources if isinstance(s, dict) and s.get("dest") == "ringrtc-src")
+          libsignal = next(s for s in sources if isinstance(s, dict) and s.get("dest") == "libsignal-src")
           print(f"sd_tag={sources[0]['tag']}")
           print(f"runtime={manifest['runtime-version']}")
           node_ext = next(e for e in manifest["sdk-extensions"] if e.startswith("org.freedesktop.Sdk.Extension.node"))
           print(f"node_ext={node_ext}")
           print(f"sc_tag={sqlcipher['tag']}")
           print(f"rr_tag={ringrtc['tag']}")
+          print(f"ls_tag={libsignal['tag']}")
           PY
 
-      - name: Check out Signal-Desktop, node-sqlcipher and RingRTC at their pinned tags
+      - name: Check out Signal-Desktop, node-sqlcipher, RingRTC and libsignal at their pinned tags
         run: |
           git clone --depth 1 --branch "${{ steps.pin.outputs.sd_tag }}" https://github.com/signalapp/Signal-Desktop.git /tmp/Signal-Desktop
           git clone --depth 1 --branch "${{ steps.pin.outputs.sc_tag }}" https://github.com/signalapp/node-sqlcipher.git /tmp/sqlcipher-src
           git clone --depth 1 --branch "${{ steps.pin.outputs.rr_tag }}" https://github.com/signalapp/ringrtc.git /tmp/ringrtc-src
+          git clone --depth 1 --branch "${{ steps.pin.outputs.ls_tag }}" https://github.com/signalapp/libsignal.git /tmp/libsignal-src
 
       - name: Check the pinned WebRTC artifacts against RingRTC
         run: |
@@ -92,10 +95,13 @@ jobs:
       - name: Regenerate cargo-sources.json
         run: python3 /tmp/flatpak-builder-tools/cargo/flatpak-cargo-generator.py /tmp/ringrtc-src/Cargo.lock -o cargo-sources.json
 
+      - name: Regenerate libsignal-cargo-sources.json
+        run: python3 /tmp/flatpak-builder-tools/cargo/flatpak-cargo-generator.py /tmp/libsignal-src/Cargo.lock -o libsignal-cargo-sources.json
+
       - name: Merge the cargo/config files into cargo-config
         run: |
           # Each Cargo sources file writes its own cargo/config; flatpak-builder keeps only the last.
-          python3 - cubeb-pulse-rs-cargo-sources.json sqlcipher-extension-cargo-sources.json cargo-sources.json > cargo-config <<'PY'
+          python3 - cubeb-pulse-rs-cargo-sources.json sqlcipher-extension-cargo-sources.json cargo-sources.json libsignal-cargo-sources.json > cargo-config <<'PY'
           import json, sys, tomlkit
           merged = tomlkit.document()
           for path in sys.argv[1:]:
@@ -112,6 +118,6 @@ jobs:
           GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
           GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
         run: |
-          git add generated-sources.json cargo-sources.json cubeb-pulse-rs-cargo-sources.json sqlcipher-extension-cargo-sources.json cargo-config
+          git add generated-sources.json cargo-sources.json cubeb-pulse-rs-cargo-sources.json sqlcipher-extension-cargo-sources.json libsignal-cargo-sources.json cargo-config
           git diff --cached --quiet || git commit -m "Regenerate vendored sources"
           git push
