@@ -7,6 +7,8 @@ sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.node24
   - org.freedesktop.Sdk.Extension.rust-stable
+  # Provides libclang, needed by bindgen (boring-sys's Rust FFI generator).
+  - org.freedesktop.Sdk.Extension.llvm22
 command: signal-desktop
 separate-locales: false
 finish-args:
@@ -51,7 +53,7 @@ modules:
   - name: signal-desktop
     buildsystem: simple
     build-options:
-      append-path: /usr/lib/sdk/node24/bin:/usr/lib/sdk/rust-stable/bin
+      append-path: /usr/lib/sdk/node24/bin:/usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/llvm22/bin
       prepend-path: /run/build/signal-desktop/pnpm-home:/run/build/signal-desktop/bin
       env:
         npm_config_nodedir: /usr/lib/sdk/node24
@@ -63,6 +65,10 @@ modules:
         CARGO_NET_OFFLINE: 'true'
         PROTOC: /run/build/signal-desktop/protoc/bin/protoc
         OUTPUT_DIR: /run/build/signal-desktop/ringrtc-src/out
+        # boring-sys's bindgen-generated FFI bindings need libclang.
+        LIBCLANG_PATH: /usr/lib/sdk/llvm22/lib
+        # build_node_bridge.py forces line tables only, and this overrides that.
+        RUSTFLAGS: -C debuginfo=2
         CARGO_PROFILE_RELEASE_DEBUG: '2'
     build-commands:
       - |
@@ -94,19 +100,49 @@ modules:
         )
         install -m 0755 "ringrtc-src/target/${rust_triple}/release/libringrtc.so" "${FLATPAK_BUILDER_BUILDDIR}/libringrtc-${node_arch}.node"
         # Not needed once we have the addon.
-        rm -rf ringrtc-src/target ringrtc-src/out "${FLATPAK_BUILDER_BUILDDIR}/protoc"
+        rm -rf ringrtc-src/target ringrtc-src/out
         rm -f webrtc.tar.bz2
+        # Build @signalapp/libsignal-client's native addon from source: its own
+        # "install" script is a no-op, so pnpm install otherwise leaves the shipped
+        # prebuilt in place. build_node_bridge.py needs only cargo/protoc/node, so
+        # extract just those toolchain components, skipping install.sh's copy step.
+        # The fetched tarball's name carries the pinned nightly date.
+        rust_tarball=$(ls "libsignal-rust-nightly-"*"-${rust_triple}.tar.gz")
+        pinned_rust=${rust_tarball#libsignal-rust-}
+        pinned_rust=${pinned_rust%-${rust_triple}.tar.gz}
+        mkdir -p "${FLATPAK_BUILDER_BUILDDIR}/rust-nightly-libsignal"
+        for component in rustc cargo "rust-std-${rust_triple}"; do
+          tar -xzf "${rust_tarball}" --strip-components=2 -C "${FLATPAK_BUILDER_BUILDDIR}/rust-nightly-libsignal" "rust-nightly-${rust_triple}/${component}"
+        done
+        # Warn (don't fail) if a bump moved libsignal off the nightly this manifest fetches.
+        required_rust=$(cat libsignal-src/rust-toolchain)
+        [ "$required_rust" = "${pinned_rust}" ] ||
+          echo "warning: libsignal-src/rust-toolchain says ${required_rust}, but this manifest still pins ${pinned_rust}" >&2
+        (
+          export PATH="${FLATPAK_BUILDER_BUILDDIR}/rust-nightly-libsignal/bin:${FLATPAK_BUILDER_BUILDDIR}/protoc/bin:${PATH}"
+          sed -i "s#directory = \"cargo/vendor\"#directory = \"${CARGO_HOME}/vendor\"#" "${CARGO_HOME}/config"
+          # build_node_bridge.py unconditionally scans this (part of cargo's normal registry cache, which our vendored setup doesn't create).
+          mkdir -p "${CARGO_HOME}/registry/src"
+          cd libsignal-src/node
+          python3 build_node_bridge.py --copy-to-prebuilds
+        )
+        # The prebuilds copy is stripped by build_node_bridge.py; take the unstripped library from cargo.
+        install -m 0755 "libsignal-src/target/${rust_triple}/release/libsignal_node.so" "${FLATPAK_BUILDER_BUILDDIR}/libsignal-client.node"
+        # Not needed once we have the addon.
+        rm -rf libsignal-src/target "${FLATPAK_BUILDER_BUILDDIR}/rust-nightly-libsignal" "${FLATPAK_BUILDER_BUILDDIR}/protoc"
+        rm -f "${rust_tarball}"
         # Skip pnpm 11's online supply-chain verification (needs registry metadata we don't have offline); we trust this pinned lockfile.
         echo "trustLockfile: true" >> pnpm-workspace.yaml
         pnpm install --offline --frozen-lockfile
         mkdir -p node_modules/@signalapp/ringrtc/build/linux
         install -m 0755 "${FLATPAK_BUILDER_BUILDDIR}/libringrtc-${node_arch}.node" "node_modules/@signalapp/ringrtc/build/linux/libringrtc-${node_arch}.node"
+        install -m 0755 "${FLATPAK_BUILDER_BUILDDIR}/libsignal-client.node" "node_modules/@signalapp/libsignal-client/prebuilds/linux-${node_arch}/@signalapp+libsignal-client.node"
         # Build @signalapp/sqlcipher's native addon from source: it ships a prebuilt
         # (found automatically by node-gyp-build, so pnpm install never compiles it),
         # overwritten below with our own build using node-sqlcipher's pinned nightly.
         # The fetched tarball's name carries the pinned nightly date.
-        rust_tarball=$(ls "rust-nightly-"*"-${rust_triple}.tar.gz")
-        pinned_rust=${rust_tarball#rust-}
+        rust_tarball=$(ls "sqlcipher-rust-nightly-"*"-${rust_triple}.tar.gz")
+        pinned_rust=${rust_tarball#sqlcipher-rust-}
         pinned_rust=${pinned_rust%-${rust_triple}.tar.gz}
         mkdir -p "${FLATPAK_BUILDER_BUILDDIR}/rust-nightly-sqlcipher"
         for component in rustc cargo "rust-std-${rust_triple}"; do
@@ -192,12 +228,12 @@ modules:
       - type: file
         url: https://static.rust-lang.org/dist/2026-07-21/rust-nightly-x86_64-unknown-linux-gnu.tar.gz
         sha256: 730fe2ba62b37260b4c92ef9b98a88ed9c4d2eb88c9fcf28e096fb6ce662c321
-        dest-filename: rust-nightly-2026-07-21-x86_64-unknown-linux-gnu.tar.gz
+        dest-filename: sqlcipher-rust-nightly-2026-07-21-x86_64-unknown-linux-gnu.tar.gz
         only-arches: [x86_64]
       - type: file
         url: https://static.rust-lang.org/dist/2026-07-21/rust-nightly-aarch64-unknown-linux-gnu.tar.gz
         sha256: d5845f89ba81af78ebc9c8bca3eb6f03cb67194646a458ac7357aef1e1f43923
-        dest-filename: rust-nightly-2026-07-21-aarch64-unknown-linux-gnu.tar.gz
+        dest-filename: sqlcipher-rust-nightly-2026-07-21-aarch64-unknown-linux-gnu.tar.gz
         only-arches: [aarch64]
       # RingRTC, built from source instead of using its prebuilt binary.
       # The regenerate workflow checks the WebRTC tarballs below against RingRTC's
@@ -224,6 +260,29 @@ modules:
         sha256: 9e24ef6137aa272bd6d4af9ef72368bde74757ddbe86bea8d02075a2c05c6152
         dest-filename: webrtc.tar.bz2
         only-arches: [aarch64]
+      # @signalapp/libsignal-client, built from source instead of using its prebuilt.
+      - type: git
+        url: https://github.com/signalapp/libsignal.git
+        commit: eb7864c4d15435ee33681ce828930d9a4296f155
+        tag: v0.101.2
+        dest: libsignal-src
+        x-checker-data:
+          type: json
+          parent-id: signal-desktop
+          # The tag to build is whatever version of "@signalapp/libsignal-client" Signal-Desktop's own package.json pins at its new tag, not libsignal's own latest release.
+          tag-data-url: '"https://raw.githubusercontent.com/signalapp/Signal-Desktop/" + $parent.new.tag + "/package.json"'
+          tag-query: '"v" + .dependencies["@signalapp/libsignal-client"]'
+          version-query: '$tag | ltrimstr("v")'
+      - type: file
+        url: https://static.rust-lang.org/dist/2026-07-16/rust-nightly-x86_64-unknown-linux-gnu.tar.gz
+        sha256: 2b582b6523c590584d3184b9d3e1534b08fa363357ba81a95470bf9247a6d05e
+        dest-filename: libsignal-rust-nightly-2026-07-16-x86_64-unknown-linux-gnu.tar.gz
+        only-arches: [x86_64]
+      - type: file
+        url: https://static.rust-lang.org/dist/2026-07-16/rust-nightly-aarch64-unknown-linux-gnu.tar.gz
+        sha256: dfbd808045e0f5091772f5cc2d13a16db26295396f66420ba8d0d41db600bb49
+        dest-filename: libsignal-rust-nightly-2026-07-16-aarch64-unknown-linux-gnu.tar.gz
+        only-arches: [aarch64]
       # RingRTC's own "protobuf" crate needs a protoc binary at build time.
       - type: archive
         url: https://github.com/protocolbuffers/protobuf/releases/download/v29.3/protoc-29.3-linux-x86_64.zip
@@ -243,6 +302,8 @@ modules:
       - sqlcipher-extension-cargo-sources.json
       # flatpak-cargo-generator.py ringrtc-src/Cargo.lock -o cargo-sources.json
       - cargo-sources.json
+      # flatpak-cargo-generator.py libsignal-src/Cargo.lock -o libsignal-cargo-sources.json -- the workspace-wide deps that "libsignal-node" builds against.
+      - libsignal-cargo-sources.json
       # Each Cargo sources file above writes its own cargo/config and only the last one survives, so this merge of all of them comes last.
       - type: file
         path: cargo-config

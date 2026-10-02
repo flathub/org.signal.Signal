@@ -13,3 +13,13 @@ rev = "bcd1cbcd306a3ef10822dec3f80c340b8c1754c3"
 git = "https://github.com/signalapp/libsignal"
 replace-with = "vendored-sources"
 tag = "v0.99.1"
+
+[source."https://github.com/signalapp/boring"]
+git = "https://github.com/signalapp/boring"
+replace-with = "vendored-sources"
+tag = "signal-v5.2.0"
+
+[source."https://github.com/signalapp/sparsepostquantumratchet"]
+git = "https://github.com/signalapp/sparsepostquantumratchet"
+replace-with = "vendored-sources"
+tag = "v1.5.3"
