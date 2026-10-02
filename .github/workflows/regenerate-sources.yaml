@@ -53,6 +53,21 @@ jobs:
           git clone --depth 1 --branch "${{ steps.pin.outputs.sc_tag }}" https://github.com/signalapp/node-sqlcipher.git /tmp/sqlcipher-src
           git clone --depth 1 --branch "${{ steps.pin.outputs.rr_tag }}" https://github.com/signalapp/ringrtc.git /tmp/ringrtc-src
 
+      - name: Check the pinned WebRTC artifacts against RingRTC
+        run: |
+          python3 - <<'PY'
+          import json, re, yaml
+          sources = yaml.safe_load(open("org.signal.Signal.yaml"))["modules"][0]["sources"]
+          expected = json.load(open("/tmp/ringrtc-src/config/webrtc_artifact_checksums.json"))
+          version = re.search(r"webrtc\.version=(\S+)", open("/tmp/ringrtc-src/config/version.properties").read()).group(1)
+          platform = {"x86_64": "linux-x64", "aarch64": "linux-arm64"}
+          for source in sources:
+              if isinstance(source, dict) and source.get("dest-filename") == "webrtc.tar.bz2":
+                  arch = source["only-arches"][0]
+                  assert f"webrtc-{version}-{platform[arch]}-release.tar.bz2" in source["url"], f"{arch}: {source['url']} is not WebRTC {version}"
+                  assert source["sha256"] == expected[platform[arch]], f"{arch}: pinned sha256 differs from RingRTC's"
+          PY
+
       - name: Regenerate generated-sources.json
         run: |
           flatpak-node-generator pnpm /tmp/Signal-Desktop/pnpm-lock.yaml -o generated-sources.json --node-sdk-extension ${{ steps.pin.outputs.node_ext }}//${{ steps.pin.outputs.runtime }} --pnpm-store-version v11
