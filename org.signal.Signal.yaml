@@ -57,6 +57,10 @@ modules:
         PNPM_HOME: /run/build/signal-desktop/pnpm-home
         # package.json's file list references this env var.
         SIGNAL_ENV: production
+        # flatpak-cargo-generator writes its vendor config to a cargo/ dir in the build root.
+        CARGO_HOME: /run/build/signal-desktop/cargo
+        CARGO_NET_OFFLINE: 'true'
+        CARGO_PROFILE_RELEASE_DEBUG: '2'
     build-commands:
       - |
         set -e
@@ -69,6 +73,36 @@ modules:
         pnpm install --offline --frozen-lockfile
         # ringrtc's prebuilt-fetch install script no-ops under pnpm 11 (npm_package_config_* isn't populated); extract the same artifact ourselves.
         tar -xzf ringrtc-desktop-build.tar.gz -C node_modules/@signalapp/ringrtc
+        # Build @signalapp/sqlcipher's native addon from source: it ships a prebuilt
+        # (found automatically by node-gyp-build, so pnpm install never compiles it),
+        # overwritten below with our own build using node-sqlcipher's pinned nightly.
+        # The fetched tarball's name carries the pinned nightly date.
+        rust_triple=$(uname -m)-unknown-linux-gnu
+        node_arch=$(node -p process.arch)
+        rust_tarball=$(ls "rust-nightly-"*"-${rust_triple}.tar.gz")
+        pinned_rust=${rust_tarball#rust-}
+        pinned_rust=${pinned_rust%-${rust_triple}.tar.gz}
+        mkdir -p "${FLATPAK_BUILDER_BUILDDIR}/rust-nightly-sqlcipher"
+        for component in rustc cargo "rust-std-${rust_triple}"; do
+          tar -xzf "${rust_tarball}" --strip-components=2 -C "${FLATPAK_BUILDER_BUILDDIR}/rust-nightly-sqlcipher" "rust-nightly-${rust_triple}/${component}"
+        done
+        # Warn (don't fail) if a bump moved sqlcipher off the nightly this manifest fetches.
+        required_rust=$(cat sqlcipher-src/rust-toolchain)
+        [ "$required_rust" = "${pinned_rust}" ] ||
+          echo "warning: sqlcipher-src/rust-toolchain says ${required_rust}, but this manifest still pins ${pinned_rust}" >&2
+        (
+          export PATH="${FLATPAK_BUILDER_BUILDDIR}/rust-nightly-sqlcipher/bin:${PATH}"
+          sed -i "s#directory = \"cargo/vendor\"#directory = \"${CARGO_HOME}/vendor\"#" "${CARGO_HOME}/config"
+          # Signal-Desktop's install already holds node-gyp and the node-addon-api that binding.gyp requires; reuse them instead of installing node-sqlcipher's own ~440-package dev set.
+          export NODE_PATH=$(ls -d "${PWD}"/node_modules/.pnpm/@signalapp+sqlcipher@*/node_modules | tail -1)
+          node_gyp=$(ls -d "${PWD}"/node_modules/.pnpm/node-gyp@*/node_modules/node-gyp | tail -1)
+          cd sqlcipher-src
+          node "${node_gyp}/bin/node-gyp.js" rebuild
+        )
+        install -m 0755 sqlcipher-src/build/Release/node_sqlcipher.node "node_modules/@signalapp/sqlcipher/prebuilds/linux-${node_arch}/@signalapp+sqlcipher.node"
+        # Not needed once we have the addon.
+        rm -rf sqlcipher-src/build sqlcipher-src/target "${FLATPAK_BUILDER_BUILDDIR}/cargo" "${FLATPAK_BUILDER_BUILDDIR}/rust-nightly-sqlcipher"
+        rm -f "${rust_tarball}"
         pnpm run build:policy-files
         pnpm run generate
         pnpm run build:rolldown:prod
@@ -108,6 +142,7 @@ modules:
           tag-pattern: '^v([\d.]+)$'
           version-scheme: semantic
           is-main-source: true
+          source-id: signal-desktop
       # In a checkout of the pinned commit, with a flatpak-node-generator that reads pnpm 11's two-document lockfile (flatpak/flatpak-builder-tools#559):
       # flatpak-node-generator pnpm pnpm-lock.yaml -o generated-sources.json --node-sdk-extension org.freedesktop.Sdk.Extension.node24//26.08 --pnpm-store-version v11
       - generated-sources.json
@@ -119,6 +154,31 @@ modules:
         # Straight from the registry, not corepack: it can neither write into the read-only SDK mount nor fetch itself offline.
         url: https://registry.npmjs.org/pnpm/-/pnpm-11.24.0.tgz
         sha256: d1eab2433172661cc36a18ec85fce93f771db1962717329cc01ec9c2824ca24f
+      # @signalapp/sqlcipher, built from source instead of using its prebuilt.
+      - type: git
+        url: https://github.com/signalapp/node-sqlcipher.git
+        commit: 0efcacbbc81360e3be5aa414109d12e50bb72642
+        tag: v4.1.0
+        dest: sqlcipher-src
+        x-checker-data:
+          type: json
+          parent-id: signal-desktop
+          # The tag to build is whatever version of "@signalapp/sqlcipher" Signal-Desktop's own package.json pins at its new tag, not node-sqlcipher's own latest release.
+          tag-data-url: '"https://raw.githubusercontent.com/signalapp/Signal-Desktop/" + $parent.new.tag + "/package.json"'
+          tag-query: '"v" + .dependencies["@signalapp/sqlcipher"]'
+          version-query: '$tag | ltrimstr("v")'
+      - type: file
+        url: https://static.rust-lang.org/dist/2026-07-21/rust-nightly-x86_64-unknown-linux-gnu.tar.gz
+        sha256: 730fe2ba62b37260b4c92ef9b98a88ed9c4d2eb88c9fcf28e096fb6ce662c321
+        dest-filename: rust-nightly-2026-07-21-x86_64-unknown-linux-gnu.tar.gz
+        only-arches: [x86_64]
+      - type: file
+        url: https://static.rust-lang.org/dist/2026-07-21/rust-nightly-aarch64-unknown-linux-gnu.tar.gz
+        sha256: d5845f89ba81af78ebc9c8bca3eb6f03cb67194646a458ac7357aef1e1f43923
+        dest-filename: rust-nightly-2026-07-21-aarch64-unknown-linux-gnu.tar.gz
+        only-arches: [aarch64]
+      # flatpak-cargo-generator.py sqlcipher-src/deps/extension/Cargo.lock -o sqlcipher-extension-cargo-sources.json -- node-sqlcipher's bundled Rust FTS5-tokenizer extension.
+      - sqlcipher-extension-cargo-sources.json
       - type: file
         path: signal-desktop.sh
       - type: file
