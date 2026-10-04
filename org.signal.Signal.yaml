@@ -43,6 +43,9 @@ finish-args:
   # Use same mouse cursors as host
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
 
+cleanup-commands:
+  - rm -f /app/bin/patch-electron-desktop-filename
+
 modules:
   - name: signal-desktop
     buildsystem: simple
