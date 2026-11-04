@@ -44,4 +44,4 @@ flatpak override --user --env=SIGNAL_DISABLE_GPU_SANDBOX=1 org.signal.Signal
 **Please only report issues in this repo that are specific to the flatpak version.**
 
 Issues that can be replicated in a stable release should be reported in the [upstream repo](https://github.com/signalapp/Signal-Desktop).
-Make sure, that the reported issue is **not** flatpak-related.
+Make sure that the reported issue is **not** flatpak-related.
