@@ -20,17 +20,38 @@ Press <b>Yes</b> to proceed with <b>plaintext password store</b> or
 EOF
     zenity --question --no-wrap --default-cancel --icon-name=dialog-warning --title "Warning" --text "$MESSAGE"
 
-    if [ "$?" -eq "1" ]; then
-        echo "Debug: Abort as user pressed no"
+    if (($? == 1)); then
+        echo "Error: User pressed no" >&2
         exit 1
     fi
 }
 
-EXTRA_ARGS=()
+# Return success if: 1, true, yes, on (case-insensitive, trimmed)
+# Otherwise return failure.
+is_true() {
+    local -r name="$1"
+    local value="${!name:-}"
 
-declare -i SIGNAL_DISABLE_GPU="${SIGNAL_DISABLE_GPU:-0}"
-declare -i SIGNAL_DISABLE_GPU_SANDBOX="${SIGNAL_DISABLE_GPU_SANDBOX:-0}"
-declare -i SIGNAL_DISABLE_ENCRYPTION_WARNING="${SIGNAL_DISABLE_ENCRYPTION_WARNING:-0}"
+    # Trim leading and trailing whitespace
+    value="${value#"${value%%[![:space:]]*}"}"
+    value="${value%"${value##*[![:space:]]}"}"
+
+    [[ "${value,,}" =~ ^(1|true|yes|on)$ ]]
+}
+
+maybe_show_encryption_warning() {
+    # Don't show if the setting is not basic
+    [[ "${SIGNAL_PASSWORD_STORE}" != "basic" ]] && return 0
+    # Don't show if Signal was already started before
+    [[ -f "${XDG_CONFIG_HOME}/Signal/config.json" ]] && return 0
+    # Don't show if it's actively disabled
+    is_true SIGNAL_DISABLE_ENCRYPTION_WARNING && return 0
+
+    # Otherwise, show the warning.
+    show_encryption_warning
+}
+
+EXTRA_ARGS=()
 
 declare -r SIGNAL_PASSWORD_STORE="${SIGNAL_PASSWORD_STORE:-basic}"
 
@@ -42,36 +63,21 @@ basic | gnome-libsecret | kwallet | kwallet5 | kwallet6)
     )
     ;;
 *)
-    echo "Error: SIGNAL_PASSWORD_STORE (${SIGNAL_PASSWORD_STORE}) must be one of the following: basic, gnome-libsecret, kwallet, kwallet5, kwallet6"
+    echo "Error: SIGNAL_PASSWORD_STORE (${SIGNAL_PASSWORD_STORE}) must be one of the following: basic, gnome-libsecret, kwallet, kwallet5, kwallet6" >&2
     exit 1
     ;;
 esac
 
-# Warn the user about plaintext password
-# - if the user chose basic (this is the default)
-# - and Signal starts for the first time
-if [[ "${SIGNAL_PASSWORD_STORE}" == "basic" ]]; then
-    if [[ ! -f "${XDG_CONFIG_HOME}/Signal/config.json" ]]; then
-        if [[ "${SIGNAL_DISABLE_ENCRYPTION_WARNING}" -eq 0 ]]; then
-            show_encryption_warning
-        fi
-    fi
-fi
+# Show encryption warning if needed
+maybe_show_encryption_warning
 
-# Remove deprecated file
-EXPLAIN_FILESYSTEM_HOST_FILE="${XDG_CACHE_HOME}/signal-user-accepted-filesystem-access"
-if [[ -f "${EXPLAIN_FILESYSTEM_HOST_FILE}" ]]; then
-    echo "Debug: filesystem=host was removed because the portals work again."
-    rm -v "${EXPLAIN_FILESYSTEM_HOST_FILE}"
-fi
-
-if [[ "${SIGNAL_DISABLE_GPU}" -eq 1 ]]; then
+if is_true SIGNAL_DISABLE_GPU; then
     EXTRA_ARGS+=(
         "--disable-gpu"
     )
 fi
 
-if [[ "${SIGNAL_DISABLE_GPU_SANDBOX}" -eq 1 ]]; then
+if is_true SIGNAL_DISABLE_GPU_SANDBOX; then
     EXTRA_ARGS+=(
         "--disable-gpu-sandbox"
     )
