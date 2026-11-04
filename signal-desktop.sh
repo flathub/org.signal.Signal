@@ -30,6 +30,7 @@ EXTRA_ARGS=()
 
 declare -i SIGNAL_DISABLE_GPU="${SIGNAL_DISABLE_GPU:-0}"
 declare -i SIGNAL_DISABLE_GPU_SANDBOX="${SIGNAL_DISABLE_GPU_SANDBOX:-0}"
+declare -i SIGNAL_DISABLE_ENCRYPTION_WARNING="${SIGNAL_DISABLE_ENCRYPTION_WARNING:-0}"
 
 declare -r SIGNAL_PASSWORD_STORE="${SIGNAL_PASSWORD_STORE:-basic}"
 
@@ -51,7 +52,9 @@ esac
 # - and Signal starts for the first time
 if [[ "${SIGNAL_PASSWORD_STORE}" == "basic" ]]; then
     if [[ ! -f "${XDG_CONFIG_HOME}/Signal Beta/config.json" ]]; then
-        show_encryption_warning
+        if [[ "${SIGNAL_DISABLE_ENCRYPTION_WARNING}" -eq 0 ]]; then
+            show_encryption_warning
+        fi
     fi
 fi
 
