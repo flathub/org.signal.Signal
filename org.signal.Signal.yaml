@@ -70,6 +70,7 @@ modules:
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop
+          update-group: signal-desktop
           root: https://updates.signal.org/desktop/apt
           dist: xenial
           component: main
@@ -81,6 +82,7 @@ modules:
         x-checker-data:
           type: debian-repo
           package-name: signal-desktop
+          update-group: signal-desktop
           root: https://updates.signal.org/desktop/apt-arm64
           dist: stable
           component: main
